@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A Discord community running free 5v5 League of Legends tournaments. Verified accounts, MMR-balanced teams, double elimination. Biweekly Saturdays." />
+  <meta name="theme-color" content="#14181f" />
+  <link rel="canonical" href="https://playraven.github.io" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Raven" />
+  <meta property="og:title" content="Raven | Free 5v5 League tournaments on Discord" />
+  <meta property="og:description" content="Free 5v5 League of Legends tournaments run start to finish on Discord. Verified accounts, balanced teams, double elimination. Biweekly Saturdays." />
+  <meta property="og:url" content="https://playraven.github.io" />
+  <meta property="og:image" content="https://playraven.github.io/bracket.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://playraven.github.io/bracket.png" />
+  <meta name="twitter:title" content="Raven | Free 5v5 League tournaments on Discord" />
+  <meta name="twitter:description" content="Free 5v5 League of Legends tournaments run start to finish on Discord. Verified accounts, balanced teams, double elimination. Biweekly Saturdays." />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='82' font-size='90'>&#x1F426;</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Public+Sans:wght@400;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+
+  <title>Raven | Free 5v5 League tournaments on Discord</title>
+
+  <style>
+    :root {
+      --paper: #14181f;
+      --ink: #e5e7eb;
+      --muted: #97a0ad;
+      --line: #2a3140;
+      --blue: #6f9df8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Public Sans", system-ui, sans-serif;
+      font-size: 1.0625rem;
+      line-height: 1.65;
+    }
+
+    a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+    .wrap { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
+
+    /* header */
+    header { border-bottom: 1px solid var(--line); }
+    .masthead {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+    }
+    .wordmark {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .masthead a.discord { font-size: 0.95rem; }
+
+    /* type roles */
+    .kicker {
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1 {
+      font-family: "Bebas Neue", sans-serif;
+      font-weight: 400;
+      font-size: clamp(3rem, 8.5vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.01em;
+      margin: 0.9rem 0 1.4rem;
+      max-width: 16ch;
+    }
+    h2 {
+      font-family: "Bebas Neue", sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin: 0.6rem 0 1.1rem;
+    }
+    p { max-width: 62ch; }
+    p + p { margin-top: 1rem; }
+    .muted { color: var(--muted); }
+
+    section.wrap { padding: 4.5rem 1.25rem 0; }
+    section.hero { padding: 5rem 1.25rem 4rem; }
+    .hero .lede { font-size: 1.15rem; }
+
+    .cta {
+      display: inline-block;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--paper);
+      background: var(--ink);
+      padding: 0.8rem 1.6rem;
+      margin-top: 1.5rem;
+      transition: background 0.15s;
+    }
+    .cta:hover { background: var(--blue); color: var(--paper); }
+    .schedule {
+      display: block;
+      margin-top: 0.9rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* steps: a real sequence, so numbered */
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+    .steps li {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 3.25rem 1fr;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .steps li::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+    .steps strong { display: block; font-weight: 600; margin-bottom: 0.15rem; }
+    .steps p { font-size: 0.98rem; color: var(--muted); max-width: 58ch; }
+
+    /* the bracket */
+    .bracket-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    figcaption { margin-top: 1rem; font-size: 0.95rem; color: var(--muted); max-width: 62ch; }
+
+    /* footer */
+    section.join { padding-bottom: 4.5rem; }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 0 3rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    footer .links { margin-top: 0.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+    @media (max-width: 640px) {
+      section.wrap { padding-top: 3.25rem; }
+      section.hero { padding: 3.5rem 1.25rem 3rem; }
+      .steps li { grid-template-columns: 2.5rem 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap masthead">
+    <a class="wordmark" href="#">RAVEN</a>
+    <a class="discord" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
+  </div>
+</header>
+
+<main>
+
+<section class="hero wrap" aria-label="Introduction">
+  <p class="kicker">A League of Legends community on Discord</p>
+  <h1>Free 5v5 tournaments, run start to finish on Discord.</h1>
+  <p class="lede">Raven is the bot behind our biweekly tournament nights. It verifies your Riot account, drafts balanced teams, and keeps the bracket updated while you play. Come with a full five or come alone: getting drafted onto a team is the easiest way to find a new group to queue with.</p>
+  <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
+  <span class="schedule">Biweekly Saturdays &middot; 3:30 PM Central</span>
+</section>
+
+<section id="how-it-works" class="wrap" aria-label="How a tournament runs">
+  <p class="kicker">Tournament night</p>
+  <h2>How it runs</h2>
+  <ol class="steps">
+    <li>
+      <div>
+        <strong>Sign up with your Riot ID</strong>
+        <p>Click Register on the announcement and enter your Riot ID. That's the whole signup.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>Get verified</strong>
+        <p>Raven confirms the account through the Riot API and pulls your rank and match history. New accounts are reviewed before they're seeded.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>Get drafted</strong>
+        <p>Teams are balanced by estimated MMR so games stay close, and you're placed in the role you asked for whenever the numbers allow it.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>Play the bracket</strong>
+        <p>Matches run back to back through the evening. Moderators report results in Discord and the bracket updates as you go.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section id="bracket" class="wrap" aria-label="Example bracket">
+  <p class="kicker">Double elimination</p>
+  <h2>Everyone gets a second life</h2>
+  <p>Every tournament is double elimination. Losing a match drops you into the losers bracket, where you can fight all the way back to the Grand Finals. Raven draws the bracket and posts an updated image after every game.</p>
+  <figure>
+    <img class="bracket-img" src="bracket.png" width="1400" height="736"
+         alt="A Raven tournament bracket, mid-tournament. Winners bracket on top, losers bracket below. Ward Bots lost their opening match and are still alive in losers round 2." />
+    <figcaption>An actual Raven bracket, mid-tournament. Ward Bots lost their opener to Mid or Feed and are still fighting through the losers bracket.</figcaption>
+  </figure>
+</section>
+
+<section id="fair-play" class="wrap" aria-label="Fair play">
+  <p class="kicker">Fair play</p>
+  <h2>Nobody plays anonymously</h2>
+  <p>Every entrant links and verifies a Riot account before they can register, and unfamiliar accounts get a second look before seeding. After each event, players commend the teammates who made the night better, and that reputation follows them into the next one. Our competitions follow Riot's Community Competition Guidelines.</p>
+</section>
+
+<section id="between-games" class="wrap" aria-label="Between games">
+  <p class="kicker">Between games</p>
+  <h2>Something to do while your queue pops</h2>
+  <p>The server doesn't go quiet between tournaments. There's a dungeon crawler to run, trading cards to collect and battle, clans to found and level, a daily Wordle, and a music bot in voice. Small games for the minutes when you're stuck in champ select or waiting on a fifth.</p>
+</section>
+
+<section class="wrap join" aria-label="Join">
+  <p class="kicker">Next tournament night</p>
+  <h2>Ready when you are</h2>
+  <p>No downloads and no setup. Join the server, link your Riot ID, and you're in the next bracket. Most people show up solo and leave with nine new people to play with.</p>
+  <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
+  <span class="schedule">Biweekly Saturdays &middot; 3:30 PM Central</span>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Raven Gaming Community. Not affiliated with or sponsored by Riot Games, Inc. or League of Legends Esports.</p>
+    <div class="links">
+      <a href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Discord</a>
+      <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/TOS.md" target="_blank" rel="noopener noreferrer">Terms</a>
+      <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
