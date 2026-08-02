@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://playraven.github.io/sitemap.xml
