@@ -44,6 +44,55 @@
   }
   </script>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I need a full team to sign up?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Most entrants register solo. Raven verifies your Riot account and drafts you onto a balanced team of five, so showing up without a premade squad is normal, not a workaround."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is it actually free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every tournament is free to enter. No downloads, no entry fee, no catch."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What rank do I need to be?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Any. Teams are matched by estimated MMR, not a rank cutoff, so Iron and Challenger players both get competitive, evenly matched games."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How are teams balanced?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Raven estimates each player's MMR from their ranked history and drafts teams so both sides come in close in total strength, then seats people in the role they asked for whenever the numbers allow it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if I don't have anyone to play with?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "That's the point of showing up solo: you get drafted next to four strangers, and most people leave tournament night with a new group to queue with afterward."
+        }
+      }
+    ]
+  }
+  </script>
+
   <style>
     :root {
       --paper: #14181f;
@@ -186,6 +235,12 @@
     }
     figcaption { margin-top: 1rem; font-size: 0.95rem; color: var(--muted); max-width: 62ch; }
 
+    /* faq */
+    .faq { margin-top: 2rem; border-top: 1px solid var(--line); }
+    .faq > div { padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
+    .faq dt { font-weight: 600; margin-bottom: 0.15rem; }
+    .faq dd { margin: 0; font-size: 0.98rem; color: var(--muted); max-width: 58ch; }
+
     /* footer */
     section.join { padding-bottom: 4.5rem; }
     footer {
@@ -274,6 +329,33 @@
   <p class="kicker">Between games</p>
   <h2>Something to do while your queue pops</h2>
   <p>The server doesn't go quiet between tournaments. There's a dungeon crawler to run, trading cards to collect and battle, clans to found and level, a daily Wordle, and a music bot in voice. Small games for the minutes when you're stuck in champ select or waiting on a fifth.</p>
+</section>
+
+<section id="faq" class="wrap" aria-label="Frequently asked questions">
+  <p class="kicker">Before you join</p>
+  <h2>Common questions</h2>
+  <dl class="faq">
+    <div>
+      <dt>Do I need a full team to sign up?</dt>
+      <dd>No. Most entrants register solo. Raven verifies your Riot account and drafts you onto a balanced team of five, so showing up without a premade squad is normal, not a workaround.</dd>
+    </div>
+    <div>
+      <dt>Is it actually free?</dt>
+      <dd>Yes. Every tournament is free to enter. No downloads, no entry fee, no catch.</dd>
+    </div>
+    <div>
+      <dt>What rank do I need to be?</dt>
+      <dd>Any. Teams are matched by estimated MMR, not a rank cutoff, so Iron and Challenger players both get competitive, evenly matched games.</dd>
+    </div>
+    <div>
+      <dt>How are teams balanced?</dt>
+      <dd>Raven estimates each player's MMR from their ranked history and drafts teams so both sides come in close in total strength, then seats people in the role they asked for whenever the numbers allow it.</dd>
+    </div>
+    <div>
+      <dt>What if I don't have anyone to play with?</dt>
+      <dd>That's the point of showing up solo: you get drafted next to four strangers, and most people leave tournament night with a new group to queue with afterward.</dd>
+    </div>
+  </dl>
 </section>
 
 <section class="wrap join" aria-label="Join">
