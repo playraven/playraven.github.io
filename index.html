@@ -3,41 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A Discord community running free 5v5 League of Legends tournaments. Verified accounts, MMR-balanced teams, double elimination. Biweekly Saturdays." />
-  <meta name="theme-color" content="#14181f" />
-  <link rel="canonical" href="https://playraven.github.io" />
+  <meta name="description" content="Free 5v5 League of Legends tournaments you can join solo, no team required. Riot-verified players, MMR-balanced teams, double elimination brackets. Biweekly Saturdays." />
+  <meta name="theme-color" content="#1e2127" />
+  <link rel="canonical" href="https://starling.gg" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Raven" />
-  <meta property="og:title" content="Raven | Free 5v5 League tournaments on Discord" />
-  <meta property="og:description" content="Free 5v5 League of Legends tournaments run start to finish on Discord. Verified accounts, balanced teams, double elimination. Biweekly Saturdays." />
-  <meta property="og:url" content="https://playraven.github.io" />
-  <meta property="og:image" content="https://playraven.github.io/bracket.png" />
+  <meta property="og:title" content="Free 5v5 League of Legends Tournaments, Join Solo" />
+  <meta property="og:description" content="Free 5v5 League of Legends tournaments you can join solo, no team required. Riot-verified players, MMR-balanced teams, double elimination brackets. Biweekly Saturdays." />
+  <meta property="og:image:alt" content="A League of Legends double elimination tournament bracket, mid-tournament." />
+  <meta property="og:url" content="https://starling.gg" />
+  <meta property="og:image" content="https://starling.gg/bracket.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://playraven.github.io/bracket.png" />
-  <meta name="twitter:title" content="Raven | Free 5v5 League tournaments on Discord" />
-  <meta name="twitter:description" content="Free 5v5 League of Legends tournaments run start to finish on Discord. Verified accounts, balanced teams, double elimination. Biweekly Saturdays." />
+  <meta name="twitter:image" content="https://starling.gg/bracket.png" />
+  <meta name="twitter:title" content="Free 5v5 League of Legends Tournaments, Join Solo" />
+  <meta name="twitter:description" content="Free 5v5 League of Legends tournaments you can join solo, no team required. Riot-verified players, MMR-balanced teams, double elimination brackets. Biweekly Saturdays." />
 
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='82' font-size='90'>&#x1F426;</text></svg>" />
 
+  <link rel="preload" as="image" href="bracket.png" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Public+Sans:wght@400;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 
-  <title>Raven | Free 5v5 League tournaments on Discord</title>
+  <title>Free 5v5 League of Legends Tournaments, Join Solo | Raven</title>
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SportsOrganization",
     "name": "Raven",
-    "url": "https://playraven.github.io",
-    "description": "A Discord community running free 5v5 League of Legends tournaments. Verified accounts, MMR-balanced teams, double elimination. Biweekly Saturdays.",
-    "logo": "https://playraven.github.io/bracket.png",
+    "url": "https://starling.gg",
+    "description": "Free 5v5 League of Legends tournaments you can join solo, no team required. Riot-verified players, MMR-balanced teams, double elimination brackets. Biweekly Saturdays.",
+    "logo": "https://starling.gg/bracket.png",
     "sameAs": [
       "https://discord.gg/CAzyGpVun7"
     ]
@@ -95,11 +97,24 @@
 
   <style>
     :root {
-      --paper: #14181f;
-      --ink: #e5e7eb;
-      --muted: #97a0ad;
-      --line: #2a3140;
-      --blue: #6f9df8;
+      /* Broadcast Rig — Classic cast (DESIGN.md) */
+      --rig-black: #1e2127;
+      --rig-rail: #16191d;
+      --rig-panel: #2c3039;
+      --rig-divider: #3b3e47;
+      --rig-line: #41454d;
+      --text-primary: #dee0e4;
+      --text-muted: #9299a4;
+      --signal-green: #43b581;
+      --signal-green-bright: #72c8a0;
+
+      --paper: var(--rig-black);
+      --ink: var(--text-primary);
+      --muted: var(--text-muted);
+      --line: var(--rig-line);
+      --divider: var(--rig-divider);
+      --accent: var(--signal-green);
+      --accent-bright: var(--signal-green-bright);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -117,17 +132,36 @@
       line-height: 1.65;
     }
 
-    a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
     a:hover { text-decoration-thickness: 2px; }
-    :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    a[target="_blank"]::after {
+      content: "\2197";
+      display: inline-block;
+      margin-left: 0.2em;
+      font-size: 0.85em;
+      text-decoration: none;
+      color: var(--muted);
+    }
+    .cta[target="_blank"]::after,
+    .masthead .discord[target="_blank"]::after { color: inherit; opacity: 0.7; }
 
     .wrap { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 
-    /* header */
-    header { border-bottom: 1px solid var(--line); }
+    /* header: sticky so the join action is never more than a glance away */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(30, 33, 39, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
     .masthead {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 1.25rem;
+      padding: 0.85rem 1.25rem;
     }
     .wordmark {
       font-family: "Bebas Neue", sans-serif;
@@ -136,7 +170,19 @@
       color: var(--ink);
       text-decoration: none;
     }
-    .masthead a.discord { font-size: 0.95rem; }
+    .masthead a.discord {
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--rig-black);
+      background: var(--accent);
+      padding: 0.55rem 1rem;
+      transition: background 0.15s;
+    }
+    .masthead a.discord:hover { background: var(--accent-bright); }
 
     /* type roles */
     .kicker {
@@ -162,15 +208,23 @@
       font-size: clamp(1.9rem, 4vw, 2.6rem);
       line-height: 1;
       letter-spacing: 0.02em;
-      margin: 0.6rem 0 1.1rem;
+      margin: 0 0 1.1rem;
     }
     p { max-width: 62ch; }
     p + p { margin-top: 1rem; }
     .muted { color: var(--muted); }
 
     section.wrap { padding: 4.5rem 1.25rem 0; }
-    section.hero { padding: 5rem 1.25rem 4rem; }
-    .hero .lede { font-size: 1.15rem; }
+    section.hero { padding: 4rem 1.25rem 4rem; }
+    .hero .lede { font-size: 1.0625rem; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .hero-visual { display: none; }
 
     .cta {
       display: inline-block;
@@ -180,13 +234,14 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       text-decoration: none;
-      color: var(--paper);
-      background: var(--ink);
+      color: var(--rig-black);
+      background: var(--accent);
+      border-radius: 6px;
       padding: 0.8rem 1.6rem;
       margin-top: 1.5rem;
       transition: background 0.15s;
     }
-    .cta:hover { background: var(--blue); color: var(--paper); }
+    .cta:hover { background: var(--accent-bright); }
     .schedule {
       display: block;
       margin-top: 0.9rem;
@@ -211,18 +266,19 @@
       grid-template-columns: 3.25rem 1fr;
       gap: 1rem;
       padding: 1.25rem 0;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--divider);
     }
     .steps li::before {
       content: counter(step, decimal-leading-zero);
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
-      font-size: 1.4rem;
+      font-size: 1.25rem;
+      font-variant-numeric: tabular-nums;
       color: var(--muted);
       line-height: 1.2;
     }
     .steps strong { display: block; font-weight: 600; margin-bottom: 0.15rem; }
-    .steps p { font-size: 0.98rem; color: var(--muted); max-width: 58ch; }
+    .steps p { font-size: 0.9375rem; color: var(--muted); max-width: 58ch; }
 
     /* the bracket */
     .bracket-img {
@@ -233,13 +289,37 @@
       border: 1px solid var(--line);
       border-radius: 6px;
     }
-    figcaption { margin-top: 1rem; font-size: 0.95rem; color: var(--muted); max-width: 62ch; }
+    figcaption { margin-top: 1rem; font-size: 0.9375rem; color: var(--muted); max-width: 62ch; }
 
-    /* faq */
+    .hero-visual figcaption { margin-top: 0.6rem; font-size: 0.8125rem; }
+    .hero-visual .bracket-img { margin-top: 0; }
+
+    /* faq: collapsed by default, matching the page's "decide fast" job */
     .faq { margin-top: 2rem; border-top: 1px solid var(--line); }
-    .faq > div { padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
-    .faq dt { font-weight: 600; margin-bottom: 0.15rem; }
-    .faq dd { margin: 0; font-size: 0.98rem; color: var(--muted); max-width: 58ch; }
+    .faq details { border-bottom: 1px solid var(--divider); }
+    .faq summary {
+      padding: 1.1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+    .faq details[open] summary::after { content: "\2212"; }
+    .faq summary:hover { color: var(--accent); }
+    .faq dd, .faq .answer { margin: 0 0 1.1rem; font-size: 0.9375rem; color: var(--muted); max-width: 58ch; }
 
     /* footer */
     section.join { padding-bottom: 4.5rem; }
@@ -250,6 +330,11 @@
       color: var(--muted);
     }
     footer .links { margin-top: 0.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+    @media (min-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr minmax(280px, 23rem); }
+      .hero-visual { display: block; }
+    }
 
     @media (max-width: 640px) {
       section.wrap { padding-top: 3.25rem; }
@@ -262,7 +347,7 @@
 
 <header>
   <div class="wrap masthead">
-    <a class="wordmark" href="#">RAVEN</a>
+    <a class="wordmark" href="/">RAVEN</a>
     <a class="discord" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
   </div>
 </header>
@@ -270,15 +355,23 @@
 <main>
 
 <section class="hero wrap" aria-label="Introduction">
-  <p class="kicker">A League of Legends community on Discord</p>
-  <h1>Free 5v5 tournaments, run start to finish on Discord.</h1>
-  <p class="lede">Raven is the bot behind our biweekly tournament nights. It verifies your Riot account, drafts balanced teams, and keeps the bracket updated while you play. Come with a full five or come alone: getting drafted onto a team is the easiest way to find a new group to queue with.</p>
-  <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
-  <span class="schedule">Biweekly Saturdays &middot; 3:30 PM Central</span>
+  <div class="hero-grid">
+    <div>
+      <p class="kicker">A League of Legends community on Discord</p>
+      <h1>Free League of Legends 5v5 tournaments on Discord.</h1>
+      <p class="lede">Raven is the bot behind our biweekly tournament nights. It verifies your Riot account, drafts balanced teams, and keeps the bracket updated while you play. Come with a full five or come alone: getting drafted onto a team is the easiest way to find a new group to queue with.</p>
+      <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
+      <span class="schedule">Biweekly Saturdays &middot; 3:30 PM Central</span>
+    </div>
+    <figure class="hero-visual">
+      <img class="bracket-img" src="bracket.png" width="1400" height="830" loading="eager" fetchpriority="high" decoding="async"
+           alt="A Raven tournament bracket, mid-tournament. Winners bracket on top, losers bracket below. Ward Bots lost their opening match and are still alive in losers round 2." />
+      <figcaption>An actual Raven bracket, mid-tournament.</figcaption>
+    </figure>
+  </div>
 </section>
 
 <section id="how-it-works" class="wrap" aria-label="How a tournament runs">
-  <p class="kicker">Tournament night</p>
   <h2>How it runs</h2>
   <ol class="steps">
     <li>
@@ -309,24 +402,21 @@
 </section>
 
 <section id="bracket" class="wrap" aria-label="Example bracket">
-  <p class="kicker">Double elimination</p>
   <h2>Everyone gets a second life</h2>
   <p>Every tournament is double elimination. Losing a match drops you into the losers bracket, where you can fight all the way back to the Grand Finals. Raven draws the bracket and posts an updated image after every game.</p>
   <figure>
-    <img class="bracket-img" src="bracket.png" width="1400" height="736"
+    <img class="bracket-img" src="bracket.png" width="1400" height="830" loading="lazy" decoding="async"
          alt="A Raven tournament bracket, mid-tournament. Winners bracket on top, losers bracket below. Ward Bots lost their opening match and are still alive in losers round 2." />
     <figcaption>An actual Raven bracket, mid-tournament. Ward Bots lost their opener to Mid or Feed and are still fighting through the losers bracket.</figcaption>
   </figure>
 </section>
 
 <section id="fair-play" class="wrap" aria-label="Fair play">
-  <p class="kicker">Fair play</p>
   <h2>Nobody plays anonymously</h2>
   <p>Every entrant links and verifies a Riot account before they can register, and unfamiliar accounts get a second look before seeding. After each event, players commend the teammates who made the night better, and that reputation follows them into the next one. Our competitions follow Riot's Community Competition Guidelines.</p>
 </section>
 
 <section id="between-games" class="wrap" aria-label="Between games">
-  <p class="kicker">Between games</p>
   <h2>Something to do while your queue pops</h2>
   <p>The server doesn't go quiet between tournaments. There's a dungeon crawler to run, trading cards to collect and battle, clans to found and level, a daily Wordle, and a music bot in voice. Small games for the minutes when you're stuck in champ select or waiting on a fifth.</p>
 </section>
@@ -334,28 +424,28 @@
 <section id="faq" class="wrap" aria-label="Frequently asked questions">
   <p class="kicker">Before you join</p>
   <h2>Common questions</h2>
-  <dl class="faq">
-    <div>
-      <dt>Do I need a full team to sign up?</dt>
-      <dd>No. Most entrants register solo. Raven verifies your Riot account and drafts you onto a balanced team of five, so showing up without a premade squad is normal, not a workaround.</dd>
-    </div>
-    <div>
-      <dt>Is it actually free?</dt>
-      <dd>Yes. Every tournament is free to enter. No downloads, no entry fee, no catch.</dd>
-    </div>
-    <div>
-      <dt>What rank do I need to be?</dt>
-      <dd>Any. Teams are matched by estimated MMR, not a rank cutoff, so Iron and Challenger players both get competitive, evenly matched games.</dd>
-    </div>
-    <div>
-      <dt>How are teams balanced?</dt>
-      <dd>Raven estimates each player's MMR from their ranked history and drafts teams so both sides come in close in total strength, then seats people in the role they asked for whenever the numbers allow it.</dd>
-    </div>
-    <div>
-      <dt>What if I don't have anyone to play with?</dt>
-      <dd>That's the point of showing up solo: you get drafted next to four strangers, and most people leave tournament night with a new group to queue with afterward.</dd>
-    </div>
-  </dl>
+  <div class="faq">
+    <details>
+      <summary>Do I need a full team to sign up?</summary>
+      <p class="answer">No. Most entrants register solo. Raven verifies your Riot account and drafts you onto a balanced team of five, so showing up without a premade squad is normal, not a workaround.</p>
+    </details>
+    <details>
+      <summary>Is it actually free?</summary>
+      <p class="answer">Yes. Every tournament is free to enter. No downloads, no entry fee, no catch.</p>
+    </details>
+    <details>
+      <summary>What rank do I need to be?</summary>
+      <p class="answer">Any. Teams are matched by estimated MMR, not a rank cutoff, so Iron and Challenger players both get competitive, evenly matched games.</p>
+    </details>
+    <details>
+      <summary>How are teams balanced?</summary>
+      <p class="answer">Raven estimates each player's MMR from their ranked history and drafts teams so both sides come in close in total strength, then seats people in the role they asked for whenever the numbers allow it.</p>
+    </details>
+    <details>
+      <summary>What if I don't have anyone to play with?</summary>
+      <p class="answer">That's the point of showing up solo: you get drafted next to four strangers, and most people leave tournament night with a new group to queue with afterward.</p>
+    </details>
+  </div>
 </section>
 
 <section class="wrap join" aria-label="Join">
