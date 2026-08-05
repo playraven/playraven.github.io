@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Free 5v5 League of Legends tournaments on Discord. Show up alone and get drafted onto an MMR-balanced team. Verified accounts, double elimination, biweekly Saturdays." />
+  <meta name="description" content="Free 5v5 League of Legends tournaments on Discord. Show up alone and get drafted onto an MMR-balanced team. Verified accounts, double elimination, every three weeks on Saturdays." />
   <meta name="theme-color" content="#211a1f" />
   <link rel="canonical" href="https://starling.gg/" />
 
@@ -13,12 +13,19 @@
   <meta property="og:title" content="Starling | Free 5v5 League tournaments on Discord" />
   <meta property="og:description" content="Show up alone, leave with a team. Free 5v5 League of Legends tournaments run start to finish on Discord, with teams drafted by estimated MMR so the games stay close." />
   <meta property="og:url" content="https://starling.gg/" />
-  <meta property="og:image" content="https://starling.gg/bracket.png" />
-  <meta property="og:image:alt" content="A completed Starling double-elimination bracket from the Run It Back tournament." />
+  <!-- Rendered by the bot and republished when the next event changes, so the
+       unfurl card names the real next tournament. The alt describes the layout
+       rather than the event, because the image is dynamic and the alt is not. -->
+  <meta property="og:image" content="https://starling.gg/share-card.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The Starling share card: the wordmark above the line 'Show up alone. Leave with a team.', over a strip naming the next scheduled tournament, its date and start time, and whether registration is open." />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://starling.gg/bracket.png" />
+  <meta name="twitter:image" content="https://starling.gg/share-card.png" />
+  <meta name="twitter:image:alt" content="The Starling share card: the wordmark above the line 'Show up alone. Leave with a team.', over a strip naming the next scheduled tournament, its date and start time, and whether registration is open." />
   <meta name="twitter:title" content="Starling | Free 5v5 League tournaments on Discord" />
   <meta name="twitter:description" content="Show up alone, leave with a team. Free 5v5 League of Legends tournaments run start to finish on Discord." />
 
@@ -38,7 +45,6 @@
     "name": "Starling",
     "url": "https://starling.gg/",
     "description": "A Discord community running free 5v5 League of Legends tournaments. Verified accounts, MMR-balanced teams, double elimination. Biweekly Saturdays.",
-    "logo": "https://starling.gg/bracket.png",
     "sameAs": [
       "https://discord.gg/CAzyGpVun7",
       "https://www.youtube.com/@literallyjustacontentchannel"
@@ -104,7 +110,7 @@
         "name": "I missed registration. What now?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Registration closes once teams are drafted, usually a few days before the event. Join the server anyway: you'll be in the room when the next one opens, and events run biweekly on Saturdays."
+          "text": "Registration closes once teams are drafted, usually a few days before the event. Join the server anyway: you'll be in the room when the next one opens, and events run every three weeks on Saturdays."
         }
       },
       {
@@ -746,7 +752,7 @@
     </details>
     <details>
       <summary>I missed registration. What now?</summary>
-      <p class="answer">Registration closes once teams are drafted, usually a few days before the event. Join the server anyway: you'll be in the room when the next one opens, and events run biweekly on Saturdays.</p>
+      <p class="answer">Registration closes once teams are drafted, usually a few days before the event. Join the server anyway: you'll be in the room when the next one opens, and events run every three weeks on Saturdays.</p>
     </details>
     <details>
       <summary>I got banned. Can I appeal?</summary>
@@ -757,7 +763,7 @@
 
 <section class="band band-raised join" aria-label="Join">
   <div class="wrap">
-    <p class="kicker" id="join-kicker">Biweekly Saturdays, 3:30 PM Central</p>
+    <p class="kicker" id="join-kicker">Every three weeks on Saturdays, 3:30 PM Central</p>
     <h2>Ready when you are</h2>
     <p>No downloads and no setup. Join the server, link your Riot ID, and you're in the next bracket. Show up solo and you'll leave with four new teammates.</p>
     <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
@@ -786,7 +792,7 @@
   // source for event data on purpose: the schedule in the organiser's head, the
   // schedule hard-coded in this file, and the schedule in the database used to be
   // three different things, and only the database was ever right.
-  var FEED = "https://rexerserver.tail1b6fea.ts.net/api/next-event.json";
+  var FEED = "https://rexerserver-1.tail1b6fea.ts.net/api/next-event.json";
   var REFRESH_MS = 5 * 60 * 1000;
 
   var el = {
@@ -888,7 +894,7 @@
     el.eyebrow.textContent = "Next tournament";
     setChip(null);
     el.title.textContent = "Announced in the server";
-    el.when.textContent = "Events run biweekly on Saturdays, 3:30 PM Central.";
+    el.when.textContent = "Events run every three weeks on Saturdays, 3:30 PM Central.";
     show(el.countdown, false);
     el.note.textContent = "Join the Discord and the next date lands in your announcements channel.";
     show(el.note, true);
