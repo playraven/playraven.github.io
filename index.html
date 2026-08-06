@@ -30,11 +30,20 @@
   <meta name="twitter:description" content="Show up alone, leave with a team. Free 5v5 League of Legends tournaments run start to finish on Discord." />
 
   <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='82' font-size='90'>&#x1F426;</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23211a1f'/><text x='50' y='72' font-family='Bebas Neue, sans-serif' font-size='64' fill='%23dee0e4' text-anchor='middle'>S</text></svg>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Public+Sans:wght@400;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Preloaded ahead of the stylesheet link below so the browser starts fetching
+       the font CSS (and, via the preconnect above, the font files it points to)
+       as early as possible in the head. display=fallback, not swap or optional:
+       fallback text still shows almost instantly, but the real font gets a ~3s
+       window to swap in early -- before anyone's actually reading -- rather than
+       optional's near-zero window (which gave up on the font outright on this
+       connection) or swap's unbounded one (which flashed mid-read). Past that
+       window it stops trying, so it can't flash in late either. -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Public+Sans:wght@400;600&family=Rajdhani:wght@600;700&display=fallback">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Public+Sans:wght@400;600&family=Rajdhani:wght@600;700&display=fallback" rel="stylesheet">
 
   <title>Starling | Free 5v5 League tournaments on Discord</title>
 
@@ -62,7 +71,7 @@
         "name": "Do I need a full team to sign up?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. Most entrants register solo. Starling verifies your Riot account and drafts you onto a balanced team of five, so showing up without a premade squad, or without knowing anyone at all, is normal, not a workaround."
+          "text": "No. Register solo or with one duo partner, and Starling drafts you onto a balanced team of five. Showing up without a squad is normal, not a workaround. Clan tournaments for full premade teams are coming."
         }
       },
       {
@@ -70,7 +79,7 @@
         "name": "Is it actually free?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Every tournament is free to enter. No downloads, no entry fee, no catch."
+          "text": "Yes. There will always be free tournaments on the schedule. Paid events with bigger prizes may join the lineup down the line, but free entry isn't going away."
         }
       },
       {
@@ -78,7 +87,7 @@
         "name": "What do you actually win?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It varies by event, and it is always something small and in-game, covered directly by the server owner. There is no entry fee either way, and prizes are expected to grow as the community does."
+          "text": "Some events are just for the games, no prize attached. Others carry one, and when they do, it's named right on the registration announcement so you know what's on the line before you sign up."
         }
       },
       {
@@ -86,7 +95,7 @@
         "name": "What rank do I need to be?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Any. Teams are matched by estimated MMR, not a rank cutoff, so Iron and Challenger players both get competitive, evenly matched games."
+          "text": "Any. Teams are matched by estimated MMR, not rank, so Iron and Challenger both get competitive games."
         }
       },
       {
@@ -94,7 +103,7 @@
         "name": "How are teams balanced?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Starling estimates each player's MMR from their ranked history and drafts teams so both sides come in close in total strength, then seats people in the role they asked for whenever the numbers allow it."
+          "text": "Starling estimates your MMR from ranked history and drafts teams to come in close in strength, seating you in your preferred role when possible."
         }
       },
       {
@@ -102,7 +111,7 @@
         "name": "What if I lose my first match?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "You're not out. Every tournament is double elimination, so a loss drops you into the losers bracket, not out of the night. You can fight all the way back to the Grand Finals."
+          "text": "You're not out. It's double elimination: a loss sends you to the losers bracket, with a path back to the Grand Finals."
         }
       },
       {
@@ -110,7 +119,7 @@
         "name": "I missed registration. What now?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Registration closes once teams are drafted, usually a few days before the event. Join the server anyway: you'll be in the room when the next one opens, and events run every three weeks on Saturdays."
+          "text": "Registration opens shortly after the previous event and stays open for about a week, well before the next one. You can still register as a substitute at any time, even after sign-ups close, and you'll get a DM if a spot opens up. Otherwise, join the server anyway: events run every three weeks on Saturdays, so you'll be ready when it opens again."
         }
       },
       {
@@ -118,7 +127,7 @@
         "name": "I got banned. Can I appeal?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Appeals go through a short form, not a mod DM, because Discord won't let a banned member message someone they no longer share a server with. The form link isn't live on this page yet; check the server's rules or announcements channel for the current process."
+          "text": "Yes. Email appeals@starling.gg with your Discord username and we'll take a look."
         }
       }
     ]
@@ -146,19 +155,24 @@
       --text-primary: #dee0e4;
       --text-muted: #9299a4;
 
-      /* One live accent, and one reserved colour.
-         Crimson does every interactive and live job: the button, the countdown,
-         links, focus, the ticket's stripe. Gold appears only where something was
-         won or is being given away, which is the same rule the bracket renderer
-         follows for the champion path. Nothing else gets a hue. The jade and
-         blossom that used to sit on the fair-play panel, the FAQ markers and the
-         pill row were a third and fourth accent competing with the button; they
-         now live only inside the bracket image, where they are the theme's own
-         match-state colours. */
+      /* Two live accents, and one reserved colour.
+         Crimson is the commit colour: the button, links, focus, hover, the
+         wordmark. Amber is the state colour: it means "open, waiting on you"
+         on the ticket's stripe and the live pill, so a match that's playing
+         right now or a registration window that's open doesn't read as
+         visually identical to the join button sitting next to it. Gold
+         appears only where something was won or is being given away, which
+         is the same rule the bracket renderer follows for the champion path.
+         Nothing else gets a hue. The jade and blossom that used to sit on the
+         fair-play panel, the FAQ markers and the pill row were a third and
+         fourth accent competing with the button; they now live only inside
+         the bracket image, where they are the theme's own match-state
+         colours. */
       --crimson: #c33456;          /* structural only: 3.03:1, cannot carry text */
-      --crimson-bright: #e37c96;   /* the live accent */
+      --crimson-bright: #e37c96;   /* the commit accent */
       --crimson-hover: #e999ad;
       --crimson-link: #eb90a6;
+      --starling-amber: #f0993d;   /* the state accent: open, live, waiting on you */
       --gold-bright: #e0b970;
 
       --paper: var(--rig-black);
@@ -169,6 +183,23 @@
       --accent: var(--crimson-bright);
       --accent-hover: var(--crimson-hover);
       --accent-structural: var(--crimson);
+      --accent-live: var(--starling-amber);
+
+      /* The instrument-panel ruling: sparse dots in the same --rig-line
+         hairline color the rest of the system already uses for dividers,
+         nothing else. No hue is introduced; a crimson-tinted glow was tried
+         here and dropped because layering it across every section read as
+         changing the page's palette, not adding texture. Layered as a second
+         background-image on top of each surface's own solid fill (never
+         replacing it), so the wide gutters either side of .wrap read as part
+         of the rig instead of dead space, and the texture stays continuous
+         under colored bands too. */
+      --rig-texture: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--rig-line) 70%, transparent) 1px,
+        transparent 1.5px
+      );
+      --rig-texture-size: 36px 36px;
 
       /* Type ramp. Six steps plus two display clamps, no in-between values: the
          previous build drifted to 13 computed sizes, six inside a 5px band. */
@@ -188,7 +219,8 @@
     }
 
     body {
-      background: var(--paper);
+      background-color: var(--paper);
+      background-image: var(--rig-texture); background-size: var(--rig-texture-size, auto);
       color: var(--ink);
       font-family: "Public Sans", system-ui, sans-serif;
       font-size: var(--t-body);
@@ -210,25 +242,32 @@
     .cta[target="_blank"]::after,
     .masthead .discord[target="_blank"]::after { color: inherit; opacity: 0.7; }
 
-    .wrap { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
+    .wrap { max-width: 80rem; margin: 0 auto; padding: 0 1.25rem; }
     /* The bracket is evidentiary content, so it is the one thing allowed past the
-       960px marketing measure. Prose stays in .wrap. */
-    .wrap-wide { max-width: 72rem; margin: 1.5rem auto 0; padding: 0 1.25rem; }
+       marketing measure. Prose stays in .wrap. */
+    .wrap-wide { max-width: 88rem; margin: 1.5rem auto 0; padding: 0 1.25rem; }
 
     /* Tonal rhythm: full-bleed bands using the system's Ground / Raised / Recessed
        vocabulary, bounded by hairlines. Never a shadow, never a gap. */
-    section { padding: 4.5rem 1.25rem 0; }
-    section.band { padding: 3.5rem 0; }
-    section.band-recessed { background: var(--rig-rail); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    section.band-raised { background: var(--rig-panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    /* The space above a heading belongs to the heading, not to the section box.
+       It used to live entirely in this padding, which rendered correctly but left
+       every h2 with literally zero margin above and 24-32px below, so the heading
+       measured as bound to whatever preceded it. Split it: the section keeps
+       enough padding to clear its own hairline, the h2 carries the rest as margin
+       (see the h2 rule). The totals below are unchanged, 4.5rem and 3.5rem. */
+    section { padding: 2rem 1.25rem 0; }
+    section.band { padding: 1rem 0 3.5rem; }
+    section.band-recessed { background-color: var(--rig-rail); background-image: var(--rig-texture); background-size: var(--rig-texture-size, auto); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    section.band-raised { background-color: var(--rig-panel); background-image: var(--rig-texture); background-size: var(--rig-texture-size, auto); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     section.band-raised.join { border-bottom: none; }
-    #bracket { padding: 4.5rem 0 0; }
+    #bracket { padding: 2rem 0 0; }
 
     header {
       position: sticky;
       top: 0;
       z-index: 10;
-      background: rgba(33, 26, 31, 0.96);
+      background-color: color-mix(in srgb, var(--rig-black) 96%, transparent);
+      background-image: var(--rig-texture); background-size: var(--rig-texture-size, auto);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
@@ -239,6 +278,7 @@
       gap: 1rem;
     }
     .wordmark {
+      position: relative;
       display: inline-flex;
       align-items: center;
       min-height: 2.75rem;
@@ -248,6 +288,40 @@
       letter-spacing: 0.06em;
       color: var(--ink);
       text-decoration: none;
+    }
+    .wordmark .wm-tld { color: var(--accent); display: inline-block; }
+    /* Locks the base text at --ink on hover: the global `a:hover` rule below
+       would otherwise win over .wordmark's own color (higher specificity via
+       the pseudo-class) and shift only the "STARLING" half toward
+       --accent-hover, landing a shade off from .wm-tld's fixed --accent and
+       reading as a broken two-tone flicker rather than a deliberate one. */
+    .wordmark:hover { color: var(--ink); }
+    /* Tuning-in: a hairline rule draws in under the wordmark, the same device
+       the rest of the system uses for dividers, just animated; the .gg half
+       flickers like a signal locking on, since it already carries the "live"
+       accent. transform/opacity only so it stays smooth. */
+    .wordmark::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .wordmark:hover::after { transform: scaleX(1); }
+    @media (prefers-reduced-motion: no-preference) {
+      .wordmark:hover .wm-tld { animation: wm-tld-lock 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+      @keyframes wm-tld-lock {
+        0% { opacity: 1; }
+        30% { opacity: 0.35; }
+        55% { opacity: 1; }
+        75% { opacity: 0.55; }
+        100% { opacity: 1; }
+      }
     }
     .masthead a.discord {
       display: inline-flex;
@@ -261,11 +335,12 @@
       text-decoration: none;
       color: var(--rig-black);
       background: var(--accent);
+      border: 2px solid var(--accent);
       padding: 0 1rem;
       border-radius: 6px;
-      transition: background 0.15s;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
-    .masthead a.discord:hover { background: var(--accent-hover); }
+    .masthead a.discord:hover { background: transparent; color: var(--accent-hover); border-color: var(--accent-hover); }
 
     /* type roles */
     .kicker {
@@ -286,13 +361,16 @@
       max-width: 15ch;
       text-wrap: pretty; /* keeps "TEAM." from stranding on a line of its own */
     }
+    /* 2.5rem above, 1.1rem below. The margin below collapses with the 2rem on
+       .steps / .faq / .run, so the real gap under a heading tops out at 2rem and
+       the space above it always wins. */
     h2 {
       font-family: "Bebas Neue", sans-serif;
       font-weight: 400;
       font-size: clamp(1.9rem, 4vw, 2.6rem);
       line-height: 1;
       letter-spacing: 0.02em;
-      margin: 0 0 1.1rem;
+      margin: 2.5rem 0 1.1rem;
     }
     p { max-width: 62ch; }
     p + p { margin-top: 1rem; }
@@ -318,13 +396,19 @@
       padding: 1.25rem 1.25rem 1.25rem 1.6rem;
       overflow: hidden;
     }
+    /* The stripe is the match card's state device, so on this page it has to
+       carry state or it is just a coloured border. It is lit only when there is
+       something the visitor can act on right now, and drops to a hairline tone
+       when registration has closed or a match is already being played. */
     .ticket::before {
       content: "";
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 4px;
-      background: var(--accent-structural);
+      background: var(--line);
+      transition: background 0.2s;
     }
+    .ticket[data-state="open"]::before { background: var(--accent-live); }
     .ticket .eyebrow {
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
@@ -347,7 +431,7 @@
       border: 1px solid var(--line);
       color: var(--muted);
     }
-    .state-chip[data-live="1"] { background: var(--accent); border-color: var(--accent); color: var(--rig-black); }
+    .state-chip[data-live="1"] { background: var(--accent-live); border-color: var(--accent-live); color: var(--rig-black); }
     .ticket .ticket-title {
       font-family: "Bebas Neue", sans-serif;
       font-weight: 400;
@@ -366,14 +450,17 @@
       font-variant-numeric: tabular-nums;
       color: var(--ink);
     }
-    .countdown { display: flex; gap: 1.1rem; margin-top: 0.85rem; }
-    .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 2.5rem; }
+    /* The countdown is the only thing on this page that is true for exactly one
+       second, so it is set at the wordmark's size rather than at label size.
+       --t-num is already in the ramp; this adds no seventh step. */
+    .countdown { display: flex; gap: 1.1rem; margin-top: 0.9rem; }
+    .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 2.75rem; }
     .countdown-value {
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
-      font-size: var(--t-lead);
+      font-size: var(--t-num);
       font-variant-numeric: tabular-nums;
-      color: var(--accent);
+      color: var(--ink);
       line-height: 1;
     }
     .countdown-label {
@@ -412,12 +499,13 @@
       text-decoration: none;
       color: var(--rig-black);
       background: var(--accent);
+      border: 2px solid var(--accent);
       border-radius: 6px;
       padding: 0.55rem 1.6rem;
       margin-top: 1.75rem;
-      transition: background 0.15s;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
-    .cta:hover { background: var(--accent-hover); }
+    .cta:hover { background: transparent; color: var(--accent-hover); border-color: var(--accent-hover); }
     .cta-note { margin-top: 0.75rem; font-size: var(--t-small); color: var(--muted); }
 
     /* steps: a real sequence, so numbered. The spine makes it a device rather
@@ -457,6 +545,102 @@
     .steps strong { display: block; font-weight: 600; margin-bottom: 0.15rem; }
     .steps p { font-size: var(--t-meta); color: var(--muted); max-width: 58ch; }
 
+    /* The run. The Krugalicious comeback was buried in a paragraph above a 2992px
+       screenshot nobody reads at this width, so it is told here in the system's
+       own match-card form: five real matches from Run It Back, in the order they
+       were played. Every name and outcome is read off bracket.png below; there
+       are no scores here because the bracket does not carry any. */
+    .run {
+      list-style: none;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(9.5rem, 1fr);
+      gap: 0.875rem;
+      margin-top: 1.75rem;
+      overflow-x: visible;
+      padding-bottom: 0.5rem;
+    }
+    /* Never a horizontal scrollbar: below the site's existing 900px breakpoint
+       (same number .hero-grid uses) the row becomes a plain stacked column
+       instead of overflowing sideways. */
+    @media (max-width: 899px) {
+      .run {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+      }
+    }
+    .match {
+      position: relative;
+      scroll-snap-align: start;
+      background: var(--rig-panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0;
+      overflow: hidden;
+    }
+    /* The one stroke in the system wider than a hairline, and the reason a match
+       card carries padding:0 and lets its rows inset themselves. */
+    .match::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--accent-structural);
+    }
+    .match[data-outcome="loss"]::before { background: var(--line); }
+    .match[data-outcome="title"]::before { background: var(--gold-bright); }
+    .match-round {
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.6rem 0.75rem 0.5rem 1.1rem;
+      border-bottom: 1px solid var(--divider);
+      white-space: nowrap;
+    }
+    .match[data-outcome="title"] .match-round { color: var(--gold-bright); }
+    .team {
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 0.75rem 0.6rem 1.1rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-body);
+      letter-spacing: 0.01em;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .team + .team { border-top: 1px solid var(--divider); }
+    /* Outcome is a tint on the winning row, capped well under the 20% blend the
+       renderer uses, plus the name stepping up to full ink. Never a filled card. */
+    .team.is-winner { color: var(--ink); background: color-mix(in srgb, var(--accent) 9%, transparent); }
+    .match[data-outcome="title"] .team.is-winner { background: color-mix(in srgb, var(--gold-bright) 11%, transparent); }
+    .vh {
+      position: absolute; width: 1px; height: 1px;
+      margin: -1px; padding: 0; border: 0;
+      clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+    }
+    .run-caption { margin-top: 1rem; font-size: var(--t-meta); color: var(--muted); max-width: 62ch; }
+
+    /* The page's one authored motion moment: the five cards arrive left to right,
+       which is the shape of the comeback they describe. Default state is visible,
+       so this never hides content when JS is off or motion is reduced. */
+    @media (prefers-reduced-motion: no-preference) {
+      .run[data-reveal="pending"] .match { opacity: 0; }
+      .run[data-reveal="in"] .match {
+        animation: match-in 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: calc(var(--i) * 90ms);
+      }
+    }
+    @keyframes match-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+
     /* the bracket */
     .bracket-img {
       display: block;
@@ -489,46 +673,6 @@
       padding: 0.45rem 0.95rem;
     }
 
-    /* fair play: the panel carries the same stripe grammar as the ticket. The two
-       facts under it are prose, not a stat band: they are words, and a word set at
-       numeral scale is a proof band with no proof in it. */
-    .fair-play-panel {
-      position: relative;
-      margin-top: 1.5rem;
-      background: var(--rig-panel);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 1.5rem 1.5rem 1.5rem 1.85rem;
-      overflow: hidden;
-    }
-    .fair-play-panel::before {
-      content: "";
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 4px;
-      background: var(--accent-structural);
-    }
-    .fair-play-panel .facts {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.75rem;
-      margin-top: 1.25rem;
-      padding-top: 1.1rem;
-      border-top: 1px solid var(--divider);
-    }
-    .fair-play-panel .fact { max-width: 24ch; }
-    .fair-play-panel .fact-label {
-      display: block;
-      font-family: "Rajdhani", sans-serif;
-      font-weight: 700;
-      font-size: var(--t-micro);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.15rem;
-    }
-    .fair-play-panel .fact-text { font-size: var(--t-meta); }
-
     /* faq: collapsed by default, matching the page's "decide fast" job.
        Not a <dl>: a definition list whose items are <details> carrying a <dd> with
        no <dt> is invalid, and hands a screen reader descriptions with no terms. */
@@ -555,8 +699,36 @@
     }
     .faq details[open] summary::after { content: "\2212"; color: var(--accent); }
     .faq summary:hover { color: var(--accent); }
-    .faq .answer { margin: 0 0 1.1rem; font-size: var(--t-meta); color: var(--muted); max-width: 58ch; }
+    /* Grid-rows collapse, not a height/max-height transition: the row track animates
+       from 0fr to 1fr, and overflow:hidden clips the answer while it's mid-collapse.
+       This also overrides the UA stylesheet's `details:not([open]) > :not(summary)
+       { display: none }`, which is why the answer is reachable and animatable at all
+       instead of snapping in and out with the open attribute. Spacing after the text
+       lives in padding, not margin, specifically so it grows and shrinks as part of
+       the same track instead of sitting there as a fixed gap under a collapsed row. */
+    /* CSS-only baseline: instant, no transition, correct in both directions with
+       zero JS. This is the real fallback, not decoration -- a transition on this
+       same max-height/[open] pairing was tried (twice, once via grid-template-rows
+       too) and both reliably animated open but got stuck fully-open on close, a
+       real Chromium limit on transitioning a details descendant's size across the
+       open attribute. The smooth version is layered on top via JS further down,
+       which sidesteps it entirely by animating on the toggle event instead of
+       through a CSS attribute-selector transition. 20rem clears every answer's
+       tallest wrap, including the narrowest mobile width. */
+    .faq .answer {
+      display: block;
+      margin: 0;
+      padding: 0 0 1.1rem;
+      font-size: var(--t-meta);
+      color: var(--muted);
+      max-width: 58ch;
+      overflow: hidden;
+      max-height: 0;
+    }
+    .faq details[open] .answer { max-height: 20rem; }
 
+    /* The kicker leads this section, so its own top space stays in the padding;
+       the h2 under it keeps the standard 2.5rem from the rule above. */
     section.band-raised.join { padding: 3.5rem 0 4.5rem; }
 
     footer {
@@ -581,10 +753,13 @@
     }
 
     @media (max-width: 640px) {
-      section:not(.hero):not(.band) { padding-top: 3.25rem; }
-      section.band { padding: 2.75rem 0; }
+      /* Same split as above: the phone totals stay 3.25rem and 2.75rem, with the
+         h2's own margin trimmed to match the tighter rhythm. */
+      section:not(.hero):not(.band) { padding-top: 1.25rem; }
+      section.band { padding: 0.75rem 0 2.75rem; }
       section.band-raised.join { padding: 2.75rem 0 3.25rem; }
       section.hero { padding: 2.75rem 1.25rem 3rem; }
+      h2 { margin-top: 2rem; }
       .steps li { grid-template-columns: 2.5rem 1fr; }
       .steps::before { left: 3rem; }
     }
@@ -594,7 +769,7 @@
 
 <header>
   <div class="wrap masthead">
-    <a class="wordmark" href="/">STARLING</a>
+    <a class="wordmark" href="/">STARLING<span class="wm-tld">.GG</span></a>
     <a class="discord" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
   </div>
 </header>
@@ -604,7 +779,10 @@
 <section class="hero wrap" aria-label="Introduction">
   <div class="hero-grid">
     <div class="hero-copy">
-      <p class="kicker">A League of Legends community on Discord</p>
+      <!-- No eyebrow here. "A League of Legends community on Discord" was a
+           sentence wearing a label's clothes: 40 characters of 12px tracked caps
+           saying what the lede says in full sentences one line later. The page
+           keeps exactly one kicker, the data-driven one above the closing CTA. -->
       <h1>Show up alone. Leave with a team.</h1>
       <p class="lede">Free 5v5 tournaments, run start to finish on Discord. Starling verifies your Riot account, drafts both sides by estimated MMR so the teams come in even, and keeps the bracket moving while you play. No signup form, no downloads, no premade required.</p>
     </div>
@@ -613,7 +791,7 @@
          There is deliberately no hard-coded date in this markup: a date baked into
          a static page is wrong the first time an event moves, and a panel that goes
          quiet is better than a panel that lies. -->
-    <div class="ticket" id="event-panel" aria-live="polite">
+    <div class="ticket" id="event-panel" data-state="unknown" aria-live="polite">
       <p class="eyebrow" id="event-eyebrow">Next tournament</p>
       <span class="state-chip" id="event-chip" hidden></span>
       <p class="ticket-title" id="event-title">Checking the server</p>
@@ -625,13 +803,13 @@
         <div class="countdown-unit" id="cd-secs-unit"><span class="countdown-value" id="cd-secs">&ndash;&ndash;</span><span class="countdown-label">Sec</span></div>
       </div>
       <p class="note" id="event-note" hidden></p>
-      <p class="note prize">Winner takes an <strong>in-game prize</strong>, covered by the server owner.</p>
+      <p class="note prize">Winner takes a <strong>Hextech chest and key</strong>, covered by the server owner.</p>
       <p class="then" id="event-then" hidden></p>
     </div>
 
     <div class="hero-act">
       <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
-      <p class="cta-note">Free to enter. Link a Riot ID in one Discord message and you're eligible.</p>
+      <p class="cta-note">Free to enter, solo or with one duo partner.</p>
     </div>
   </div>
 </section>
@@ -672,46 +850,65 @@
   <div class="wrap">
     <h2>Everyone gets a second life</h2>
     <p>Every tournament is double elimination. Losing a match drops you into the losers bracket, where you can fight all the way back to the Grand Finals. Starling draws the bracket and posts an updated image after every game.</p>
-    <p>Below is the real one from Run It Back. Krugalicious lost to NCTEB, who went the whole tournament undefeated. Krugalicious dropped to the losers bracket, won their way back through it, and then beat NCTEB twice in a row to take the title.</p>
+
+    <!-- Krugalicious' run at Run It Back, every match read off bracket.png below.
+         No scores: that bracket does not carry any, and inventing them is not on
+         the table. -->
+    <ol class="run" id="run" aria-label="Krugalicious' run at Run It Back, match by match">
+      <li class="match" data-outcome="loss" style="--i:0">
+        <p class="match-round">Winners R1</p>
+        <div class="team">Krugalicious</div>
+        <div class="team is-winner">NCTEB<span class="vh"> won</span></div>
+      </li>
+      <li class="match" data-outcome="win" style="--i:1">
+        <p class="match-round">Losers R1</p>
+        <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
+        <div class="team">Baddies</div>
+      </li>
+      <li class="match" data-outcome="win" style="--i:2">
+        <p class="match-round">Losers R2</p>
+        <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
+        <div class="team">The Lil Guys</div>
+      </li>
+      <li class="match" data-outcome="win" style="--i:3">
+        <p class="match-round">Grand Finals</p>
+        <div class="team">NCTEB</div>
+        <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
+      </li>
+      <li class="match" data-outcome="title" style="--i:4">
+        <p class="match-round">Bracket Reset</p>
+        <div class="team">NCTEB</div>
+        <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
+      </li>
+    </ol>
   </div>
   <div class="wrap-wide">
     <figure>
-      <img class="bracket-img" src="bracket.png" width="2992" height="1042" loading="lazy" decoding="async"
-           alt="The completed Run It Back bracket. Krugalicious lose to NCTEB in the winners bracket, win two losers-bracket matches against Baddies and The Lil Guys, then beat NCTEB in both the Grand Finals and the bracket reset to become champion." />
-      <figcaption>Run It Back, played 21 March 2026. Drawn by the bot after every match, exactly as it was posted in the server that night.</figcaption>
+      <picture>
+        <source srcset="bracket.webp" type="image/webp">
+        <img class="bracket-img" src="bracket.png" width="2992" height="1042" loading="lazy" decoding="async"
+             alt="The completed Run It Back bracket. Krugalicious lose to NCTEB in the winners bracket, win two losers-bracket matches against Baddies and The Lil Guys, then beat NCTEB in both the Grand Finals and the bracket reset to become champion." />
+      </picture>
     </figure>
+  </div>
+  <div class="wrap">
+    <p class="run-caption">This is what a second life looks like: an early loss to NCTEB, then four straight wins back through the losers bracket to steal the title.</p>
   </div>
 </section>
 
 <section id="watch-live" class="band band-recessed" aria-label="Watch live">
   <div class="wrap">
     <h2>Watch live, get drops</h2>
-    <p>Matches stream through Discord Stage channels, each with its own scheduled event and a direct "watch live" link. While a match is live, organizers can trigger a drop: a real Int Coins payout to everyone listening in, no strings attached.</p>
-    <p>Missed it? Highlights land on <a href="https://www.youtube.com/@literallyjustacontentchannel" target="_blank" rel="noopener noreferrer">YouTube</a> afterward.</p>
+    <p>Matches stream live in Discord, free for anyone to watch. We drop in-server rewards during hype moments, so tuning in pays off. Missed it? Highlights land on <a href="https://www.youtube.com/@literallyjustacontentchannel" target="_blank" rel="noopener noreferrer">YouTube</a> afterward.</p>
   </div>
 </section>
 
-<section id="fair-play" class="wrap" aria-label="Fair play">
-  <h2>Nobody plays anonymously</h2>
-  <div class="fair-play-panel">
-    <p>Every entrant links and verifies a Riot account before they can register, and unfamiliar accounts get a second look before they go into the draft. After each event, players commend the teammates who made the night better, and that reputation follows them into the next one. Our competitions follow Riot's Community Competition Guidelines.</p>
-    <div class="facts">
-      <p class="fact">
-        <span class="fact-label">Every entrant</span>
-        <span class="fact-text">Linked to a verified Riot account, checked through the Riot API.</span>
-      </p>
-      <p class="fact">
-        <span class="fact-label">Smurf screening</span>
-        <span class="fact-text">Unfamiliar accounts are scored and reviewed before they can be drafted.</span>
-      </p>
-    </div>
-  </div>
-</section>
+
 
 <section id="between-games" class="band band-recessed" aria-label="Between games">
   <div class="wrap">
-    <h2>Something to do while your queue pops</h2>
-    <p>The server doesn't go quiet between tournaments. Small games for the minutes when you're stuck in champ select or waiting on a fifth.</p>
+    <h2>Something to do while you wait</h2>
+    <p>The server doesn't go quiet between tournaments. Small games fill the gaps, whether you're in champ select or waiting for people to log on, and they add up to real progress: climb your MMR profile, grow a clan badge worth flexing, and stack Int Coins from dailies, drops and games.</p>
     <ul class="pill-row">
       <li>Dungeon crawler</li>
       <li>Trading cards</li>
@@ -723,40 +920,39 @@
 </section>
 
 <section id="faq" class="wrap" aria-label="Frequently asked questions">
-  <p class="kicker">Before you join</p>
   <h2>Common questions</h2>
   <div class="faq">
     <details>
       <summary>Do I need a full team to sign up?</summary>
-      <p class="answer">No. Most entrants register solo. Starling verifies your Riot account and drafts you onto a balanced team of five, so showing up without a premade squad, or without knowing anyone at all, is normal, not a workaround.</p>
+      <p class="answer"><span>No. Register solo or with one duo partner, and Starling drafts you onto a balanced team of five. Showing up without a squad is normal, not a workaround. Clan tournaments for full premade teams are coming.</span></p>
     </details>
     <details>
       <summary>Is it actually free?</summary>
-      <p class="answer">Yes. Every tournament is free to enter. No downloads, no entry fee, no catch.</p>
+      <p class="answer"><span>Yes. There will always be free tournaments on the schedule. Paid events with bigger prizes may join the lineup down the line, but free entry isn't going away.</span></p>
     </details>
     <details>
       <summary>What do you actually win?</summary>
-      <p class="answer">It varies by event, and it is always something small and in-game, covered directly by the server owner. There is no entry fee either way, and prizes are expected to grow as the community does.</p>
+      <p class="answer"><span>Some events are just for the games, no prize attached. Others carry one, and when they do, it's named right on the registration announcement so you know what's on the line before you sign up.</span></p>
     </details>
     <details>
       <summary>What rank do I need to be?</summary>
-      <p class="answer">Any. Teams are matched by estimated MMR, not a rank cutoff, so Iron and Challenger players both get competitive, evenly matched games.</p>
+      <p class="answer"><span>Any. Teams are matched by estimated MMR, not rank, so Iron and Challenger both get competitive games.</span></p>
     </details>
     <details>
       <summary>How are teams balanced?</summary>
-      <p class="answer">Starling estimates each player's MMR from their ranked history and drafts teams so both sides come in close in total strength, then seats people in the role they asked for whenever the numbers allow it.</p>
+      <p class="answer"><span>Starling estimates your MMR from ranked history and drafts teams to come in close in strength, seating you in your preferred role when possible.</span></p>
     </details>
     <details>
       <summary>What if I lose my first match?</summary>
-      <p class="answer">You're not out. Every tournament is double elimination, so a loss drops you into the losers bracket, not out of the night. You can fight all the way back to the Grand Finals.</p>
+      <p class="answer"><span>You're not out. It's double elimination: a loss sends you to the losers bracket, with a path back to the Grand Finals.</span></p>
     </details>
     <details>
       <summary>I missed registration. What now?</summary>
-      <p class="answer">Registration closes once teams are drafted, usually a few days before the event. Join the server anyway: you'll be in the room when the next one opens, and events run every three weeks on Saturdays.</p>
+      <p class="answer"><span>Registration opens shortly after the previous event and stays open for about a week, well before the next one. You can still register as a substitute at any time, even after sign-ups close, and you'll get a DM if a spot opens up. Otherwise, join the server anyway: events run every three weeks on Saturdays, so you'll be ready when it opens again.</span></p>
     </details>
     <details>
       <summary>I got banned. Can I appeal?</summary>
-      <p class="answer">Yes. Appeals go through a short form, not a mod DM, because Discord won't let a banned member message someone they no longer share a server with. The form link isn't live on this page yet; check the server's rules or announcements channel for the current process.</p>
+      <p class="answer"><span>Yes. Email <a href="mailto:appeals@starling.gg">appeals@starling.gg</a> with your Discord username and we'll take a look.</span></p>
     </details>
   </div>
 </section>
@@ -765,7 +961,7 @@
   <div class="wrap">
     <p class="kicker" id="join-kicker">Every three weeks on Saturdays, 3:30 PM Central</p>
     <h2>Ready when you are</h2>
-    <p>No downloads and no setup. Join the server, link your Riot ID, and you're in the next bracket. Show up solo and you'll leave with four new teammates.</p>
+    <p>Join the server, link your Riot ID, and you're in the next bracket. Show up solo and you'll leave with four new teammates.</p>
     <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
   </div>
 </section>
@@ -774,10 +970,11 @@
 
 <footer>
   <div class="wrap">
-    <p>Starling Gaming Community. Not affiliated with or sponsored by Riot Games, Inc. or League of Legends Esports.</p>
+    <p>starling.gg. Not affiliated with or sponsored by Riot Games, Inc. or League of Legends Esports.</p>
     <div class="links">
       <a href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Discord</a>
       <a href="https://www.youtube.com/@literallyjustacontentchannel" target="_blank" rel="noopener noreferrer">YouTube</a>
+      <a href="mailto:contact@starling.gg">Contact</a>
       <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/TOS.md" target="_blank" rel="noopener noreferrer">Terms</a>
       <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy</a>
     </div>
@@ -796,6 +993,7 @@
   var REFRESH_MS = 5 * 60 * 1000;
 
   var el = {
+    panel: document.getElementById("event-panel"),
     eyebrow: document.getElementById("event-eyebrow"),
     chip: document.getElementById("event-chip"),
     title: document.getElementById("event-title"),
@@ -815,6 +1013,34 @@
   var timerIsSlow = false;
   var target = null;
 
+  // The panel's one authored moment: real data landing, not a hardcoded date. Every
+  // text swap that actually changes gets a small rise-and-fade, using the same
+  // arrival curve as the wordmark and the .run reveal, so it reads as this specific
+  // product's honesty (no invented state, ever) rather than as decoration. Skipped
+  // entirely under reduced motion and on browsers without the Web Animations API;
+  // content is already correct without it.
+  var canAnimate = !!(window.Element && Element.prototype.animate) &&
+    !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  function arrive(el, distance, duration) {
+    if (!canAnimate || !el) { return; }
+    el.animate(
+      [{ opacity: 0, transform: "translateY(" + distance + "px)" }, { opacity: 1, transform: "translateY(0)" }],
+      { duration: duration, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }
+    );
+  }
+
+  // Only animates when the text actually changed, so a routine 5-minute poll that
+  // confirms nothing moved stays silent instead of re-announcing the same state.
+  // Skips its own animation while the node is still hidden: show() below fires the
+  // entrance once the node is revealed, and firing both here would double it up.
+  function setText(node, text) {
+    if (!node || node.textContent === text) { return; }
+    var wasVisible = !node.hidden;
+    node.textContent = text;
+    if (wasVisible) { arrive(node, 12, 480); }
+  }
+
   var MONTHS = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
   var MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -822,7 +1048,12 @@
   var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   function pad(n) { return n < 10 ? "0" + n : String(n); }
-  function show(node, on) { if (node) { node.hidden = !on; } }
+  function show(node, on) {
+    if (!node) { return; }
+    var wasHidden = node.hidden;
+    node.hidden = !on;
+    if (on && wasHidden) { arrive(node, 8, 400); }
+  }
 
   function formatWhen(iso) {
     // The feed sends the start time with the Central offset already applied, so
@@ -881,22 +1112,34 @@
 
   function setChip(text, live) {
     if (!text) { show(el.chip, false); return; }
+    var changed = el.chip.textContent !== text;
     el.chip.textContent = text;
     if (live) { el.chip.setAttribute("data-live", "1"); }
     else { el.chip.removeAttribute("data-live"); }
+    var wasHidden = el.chip.hidden;
     show(el.chip, true);
+    // show() only animates on the hidden->visible edge; a chip already on screen
+    // that just changed what it says (open -> live) needs its own trigger.
+    if (changed && !wasHidden) { arrive(el.chip, 6, 340); }
+  }
+
+  // The ticket's stripe is lit only when there is something to act on. Anything
+  // else, including a match already being played, leaves it a hairline tone.
+  function setState(state) {
+    if (el.panel) { el.panel.setAttribute("data-state", state); }
   }
 
   function renderUnavailable() {
     // Reached when the bot is unreachable or has nothing scheduled. It states the
     // standing cadence, which is always true, and never a specific date.
     stopTimer();
-    el.eyebrow.textContent = "Next tournament";
+    setState("unknown");
+    setText(el.eyebrow, "Next tournament");
     setChip(null);
-    el.title.textContent = "Announced in the server";
-    el.when.textContent = "Events run every three weeks on Saturdays, 3:30 PM Central.";
+    setText(el.title, "Announced in the server");
+    setText(el.when, "Events run every three weeks on Saturdays, 3:30 PM Central.");
     show(el.countdown, false);
-    el.note.textContent = "Join the Discord and the next date lands in your announcements channel.";
+    setText(el.note, "Join the Discord and the next date lands in your announcements channel.");
     show(el.note, true);
     show(el.then, false);
   }
@@ -905,23 +1148,32 @@
     var event = data && data.event;
     if (!event || !event.starts_at_utc) { renderUnavailable(); return; }
 
-    el.title.textContent = event.name;
-    el.when.textContent = formatWhen(event.starts_at);
+    setText(el.title, event.name);
+    setText(el.when, formatWhen(event.starts_at));
 
+    // Chip text stays a label, not a clause. Anything that needs a qualifier
+    // ("free entry", "teams are drafted") belongs in the note underneath, where
+    // it is sentence case and readable; 30 characters of tracked uppercase in a
+    // pill is a paragraph in a costume.
     if (event.state === "live") {
       stopTimer();
-      el.eyebrow.textContent = "Happening now";
+      setState("live");
+      setText(el.eyebrow, "Happening now");
       setChip("Playing live", true);
       show(el.countdown, false);
-      el.note.textContent = "Matches are running right now. Join the server to watch in the Stage channel and catch a drop.";
+      setText(el.note, "Matches are running right now. Join the server to watch in the Stage channel and catch a drop.");
     } else {
-      el.eyebrow.textContent = "Next tournament";
+      setText(el.eyebrow, "Next tournament");
       if (event.registration_open) {
-        setChip(event.free_entry ? "Registration open · free entry" : "Registration open", true);
-        el.note.textContent = "Register on the announcement in the server. Sign-ups close once teams are drafted.";
+        setState("open");
+        setChip("Registration open", true);
+        setText(el.note, event.free_entry
+          ? "Free to enter. Register on the announcement in the server; sign-ups close once teams are drafted."
+          : "Register on the announcement in the server. Sign-ups close once teams are drafted.");
       } else {
-        setChip("Teams drafted · sign-ups closed", false);
-        el.note.textContent = "Registration for this one has closed. Join now and you're in the room when the next bracket opens.";
+        setState("closed");
+        setChip("Sign-ups closed", false);
+        setText(el.note, "Teams for this one are already drafted. Join to watch it live, or register as a sub and get pulled in if a spot opens.");
       }
       target = Date.parse(event.starts_at_utc);
       if (isFinite(target) && target > Date.now()) {
@@ -935,9 +1187,9 @@
 
     var upcoming = (data.upcoming || []).filter(function (e) { return e.starts_at; });
     if (upcoming.length) {
-      el.then.textContent = "Then: " + upcoming.map(function (e) {
+      setText(el.then, "Then: " + upcoming.map(function (e) {
         return e.name + " · " + shortDate(e.starts_at);
-      }).join("   ·   ");
+      }).join("   ·   "));
       show(el.then, true);
     } else {
       show(el.then, false);
@@ -956,6 +1208,54 @@
       .then(render)
       .catch(renderUnavailable);
   }
+
+  // The run arrives left to right when it scrolls into view, which is the shape
+  // of the comeback it describes. The cards are visible by default, so a browser
+  // with no IntersectionObserver, or a visitor who asked for reduced motion,
+  // simply gets them already there.
+  (function revealRun() {
+    var run = document.getElementById("run");
+    if (!run || !("IntersectionObserver" in window)) { return; }
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { return; }
+    run.setAttribute("data-reveal", "pending");
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) { return; }
+        run.setAttribute("data-reveal", "in");
+        io.disconnect();
+      });
+    }, { threshold: 0.2 });
+    io.observe(run);
+  })();
+
+  // Progressive enhancement over the CSS-only [open] rule above, which already
+  // works correctly and instantly with zero JS. This intercepts the same toggle
+  // to grow/shrink it smoothly instead, setting an inline max-height (which wins
+  // over the CSS attribute-selector rule by specificity) right before each
+  // animate() call so the two never fight over the value.
+  document.querySelectorAll(".faq details").forEach(function (d) {
+    var ans = d.querySelector(".answer");
+    if (!ans) { return; }
+    d.addEventListener("toggle", function () {
+      if (!canAnimate) { return; }
+      if (d.open) {
+        var target = ans.scrollHeight;
+        ans.style.maxHeight = "0px";
+        ans.animate(
+          [{ maxHeight: "0px" }, { maxHeight: target + "px" }],
+          { duration: 380, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }
+        );
+        ans.style.maxHeight = target + "px";
+      } else {
+        var from = ans.style.maxHeight || ans.scrollHeight + "px";
+        ans.animate(
+          [{ maxHeight: from }, { maxHeight: "0px" }],
+          { duration: 380, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }
+        );
+        ans.style.maxHeight = "0px";
+      }
+    });
+  });
 
   load();
   setInterval(load, REFRESH_MS);
