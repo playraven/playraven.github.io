@@ -847,32 +847,46 @@
     }
     .champions-kicker { margin-top: 2.5rem; }
     .champions-list { list-style: none; margin-top: 1rem; border-top: 1px solid var(--line); }
+    /* Stacked, not a name-left/date-right row: a bare team name told a stranger
+       nothing, and a flex space-between row with the stripe counted as a flex
+       item drifted the name to a different x per row instead of a fixed left
+       edge. The stripe is positioned absolutely instead, off the flex/flow
+       axis entirely -- the same device .match::before uses elsewhere on this
+       page -- so it can never compete for layout space again. */
     .champion-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.85rem 0;
+      position: relative;
+      padding: 0.85rem 0 0.85rem 1rem;
       border-bottom: 1px solid var(--divider);
     }
-    .champion-team {
-      font-family: "Rajdhani", sans-serif;
-      font-weight: 700;
-      font-size: var(--t-body);
-      color: var(--ink);
-    }
-    /* Gold marks a win, same rule the bracket renderer and the ticket's prize
-       line both follow -- nothing else on the page gets this hue. */
     .champion-row::before {
       content: "";
-      align-self: center;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
       width: 4px;
-      height: 1.4rem;
-      margin-right: 0.1rem;
+      height: 2.2rem;
+      /* Gold marks a win, same rule the bracket renderer and the ticket's
+         prize line both follow -- nothing else on the page gets this hue. */
       background: var(--gold-bright);
-      flex-shrink: 0;
     }
-    .champion-meta { font-size: var(--t-meta); color: var(--muted); white-space: nowrap; }
+    .champion-label {
+      display: block;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+    }
+    .champion-team {
+      display: block;
+      margin-top: 0.2rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-lead);
+      color: var(--ink);
+    }
 
     /* watch-live: a real embed instead of a "check YouTube" paragraph. The
        16:9 box is held with padding-top so the iframe never reflows the page
@@ -1067,7 +1081,6 @@
     <ul class="stat-row" id="stat-row" aria-live="polite">
       <li><span class="stat-value" id="stat-tournaments">&ndash;&ndash;</span><span class="stat-label">Tournaments run</span></li>
       <li><span class="stat-value" id="stat-players">&ndash;&ndash;</span><span class="stat-label">Players competed</span></li>
-      <li><span class="stat-value" id="stat-coins">&ndash;&ndash;</span><span class="stat-label">Int Coins awarded</span></li>
     </ul>
     <p class="kicker champions-kicker" id="champions-kicker" hidden>Hall of champions</p>
     <ol class="champions-list" id="champions-list" aria-label="Recent tournament champions"></ol>
@@ -1405,7 +1418,6 @@
     section: document.getElementById("community"),
     tournaments: document.getElementById("stat-tournaments"),
     players: document.getElementById("stat-players"),
-    coins: document.getElementById("stat-coins"),
     champKicker: document.getElementById("champions-kicker"),
     champList: document.getElementById("champions-list"),
     liveBadge: document.getElementById("live-badge"),
@@ -1427,21 +1439,23 @@
     if (hasStats) {
       setText(communityEl.tournaments, String(stats.tournaments_run));
       setText(communityEl.players, String(stats.players_competed));
-      setText(communityEl.coins, stats.prize_distributed_coins.toLocaleString());
 
       if (communityEl.champList) {
         communityEl.champList.innerHTML = "";
         champions.forEach(function (c) {
           var li = document.createElement("li");
           li.className = "champion-row";
+          // "Champion" plus which event and when it happened, then the team
+          // name -- a bare team name told a first-time visitor nothing.
+          var label = document.createElement("span");
+          label.className = "champion-label";
+          label.textContent = "Champion · " + c.tournament_name +
+            (c.completed_at ? " · " + shortDate(c.completed_at) : "");
           var team = document.createElement("span");
           team.className = "champion-team";
           team.textContent = c.team_name;
-          var meta = document.createElement("span");
-          meta.className = "champion-meta";
-          meta.textContent = c.tournament_name + (c.completed_at ? " · " + shortDate(c.completed_at) : "");
+          li.appendChild(label);
           li.appendChild(team);
-          li.appendChild(meta);
           communityEl.champList.appendChild(li);
         });
       }
