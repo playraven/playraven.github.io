@@ -242,10 +242,18 @@
     .cta[target="_blank"]::after,
     .masthead .discord[target="_blank"]::after { color: inherit; opacity: 0.7; }
 
-    .wrap { max-width: 80rem; margin: 0 auto; padding: 0 1.25rem; }
-    /* The bracket is evidentiary content, so it is the one thing allowed past the
-       marketing measure. Prose stays in .wrap. */
-    .wrap-wide { max-width: 88rem; margin: 1.5rem auto 0; padding: 0 1.25rem; }
+    /* Raised from 80rem/88rem (2026-08-15): the page read as a narrow column
+       floating in a lot of unused ground on a real desktop monitor, which the
+       dotted --rig-texture softened but never actually solved. Prose still
+       self-limits at 62ch/58ch regardless of container width (see `p` and the
+       FAQ/run rules below), so widening the measure gives headings, tiles and
+       media room without turning a paragraph into a wall of text. */
+    .wrap { max-width: 88rem; margin: 0 auto; padding: 0 1.25rem; }
+    /* Evidence gets the wider measure: the bracket image, and now the things
+       that carry the same kind of proof -- the video embed and the Hall of
+       Champions/stat band. A heading or a lede stays in .wrap even inside a
+       section that also uses this; only the evidentiary block itself moves. */
+    .wrap-wide { max-width: 100rem; margin: 1.5rem auto 0; padding: 0 1.25rem; }
 
     /* Tonal rhythm: full-bleed bands using the system's Ground / Raised / Recessed
        vocabulary, bounded by hairlines. Never a shadow, never a gap. */
@@ -341,6 +349,31 @@
       transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
     .masthead a.discord:hover { background: transparent; color: var(--accent-hover); border-color: var(--accent-hover); }
+
+    /* The member count is sourced from the bot's own guild cache (see
+       music_bot.py's community-stats handler), not fetched from Discord
+       client-side -- Discord's public widget/invite JSON endpoints either
+       leak online members' usernames or have no CORS header for a browser
+       fetch from another origin. Hidden until real data lands, same rule as
+       the event panel: no placeholder number, ever. */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .live-badge-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: var(--starling-amber);
+      flex-shrink: 0;
+    }
 
     /* type roles */
     .kicker {
@@ -756,12 +789,135 @@
       /* Same split as above: the phone totals stay 3.25rem and 2.75rem, with the
          h2's own margin trimmed to match the tighter rhythm. */
       section:not(.hero):not(.band) { padding-top: 1.25rem; }
+      /* The masthead has room for the wordmark and the join button at this
+         width, same as before this badge existed -- a third flex item here
+         wraps the button's own label onto two lines, which reads as broken. */
+      .live-badge { display: none; }
       section.band { padding: 0.75rem 0 2.75rem; }
       section.band-raised.join { padding: 2.75rem 0 3.25rem; }
       section.hero { padding: 2.75rem 1.25rem 3rem; }
       h2 { margin-top: 2rem; }
       .steps li { grid-template-columns: 2.5rem 1fr; }
       .steps::before { left: 3rem; }
+    }
+
+    /* community track record: aggregate totals plus a champion-by-champion
+       list, both driven by /api/community-stats.json. Hidden by default and
+       only shown once real data lands (see the script block) -- a brand-new
+       server with zero completed tournaments should show nothing here rather
+       than a row of zeroes. */
+    #community { display: none; }
+    .stat-row {
+      list-style: none;
+      display: grid;
+      /* auto-fit per the system's own stat-tile grid rule (collapses to one
+         column on a narrow phone). The row's own max-width is capped
+         separately so three real tiles read as tiles on the wider .wrap
+         measure instead of stretching into three sparse giants. */
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      max-width: 44rem;
+      margin-top: 2rem;
+    }
+    .stat-row li {
+      background: var(--rig-panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1.1rem 0.75rem;
+      text-align: center;
+    }
+    .stat-value {
+      display: block;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-num);
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .stat-label {
+      display: block;
+      margin-top: 0.4rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .champions-kicker { margin-top: 2.5rem; }
+    .champions-list { list-style: none; margin-top: 1rem; border-top: 1px solid var(--line); }
+    .champion-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--divider);
+    }
+    .champion-team {
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-body);
+      color: var(--ink);
+    }
+    /* Gold marks a win, same rule the bracket renderer and the ticket's prize
+       line both follow -- nothing else on the page gets this hue. */
+    .champion-row::before {
+      content: "";
+      align-self: center;
+      width: 4px;
+      height: 1.4rem;
+      margin-right: 0.1rem;
+      background: var(--gold-bright);
+      flex-shrink: 0;
+    }
+    .champion-meta { font-size: var(--t-meta); color: var(--muted); white-space: nowrap; }
+
+    /* watch-live: a real embed instead of a "check YouTube" paragraph. The
+       16:9 box is held with padding-top so the iframe never reflows the page
+       while it loads. */
+    .video-embed {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      margin-top: 1.5rem;
+      background: var(--rig-panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+    /* the upcoming strip: was one run-on text line ("Then: A · date  ·  B ·
+       date"), now a small row of chips so a second and third event actually
+       read as distinct things to plan around. */
+    .then-label {
+      display: block;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .then-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .then-list li {
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-small);
+      color: var(--text-primary);
+      background: var(--rig-black);
+      border: 1px solid var(--divider);
+      border-radius: 999px;
+      padding: 0.3rem 0.75rem;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -770,6 +926,7 @@
 <header>
   <div class="wrap masthead">
     <a class="wordmark" href="/">STARLING<span class="wm-tld">.GG</span></a>
+    <span class="live-badge" id="live-badge" hidden><span class="live-badge-dot" aria-hidden="true"></span><span id="live-count"></span></span>
     <a class="discord" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
   </div>
 </header>
@@ -804,7 +961,10 @@
       </div>
       <p class="note" id="event-note" hidden></p>
       <p class="note prize">Winner takes a <strong>Hextech chest and key</strong>, covered by the server owner.</p>
-      <p class="then" id="event-then" hidden></p>
+      <div class="then" id="event-then" hidden>
+        <span class="then-label">Then</span>
+        <ul class="then-list" id="then-list"></ul>
+      </div>
     </div>
 
     <div class="hero-act">
@@ -896,10 +1056,37 @@
   </div>
 </section>
 
-<section id="watch-live" class="band band-recessed" aria-label="Watch live">
+<!-- Populated from /api/community-stats.json, see the script block. Stays
+     display:none (set in the stylesheet) until real totals land, and the
+     champions list stays empty until there is a resolved grand finals to
+     show -- never a placeholder number or an invented champion. Team-based
+     only: no Discord username or user id ever appears here. -->
+<section id="community" class="band band-recessed" aria-label="Community track record">
+  <div class="wrap">
+    <h2>What this community has already done</h2>
+    <ul class="stat-row" id="stat-row" aria-live="polite">
+      <li><span class="stat-value" id="stat-tournaments">&ndash;&ndash;</span><span class="stat-label">Tournaments run</span></li>
+      <li><span class="stat-value" id="stat-players">&ndash;&ndash;</span><span class="stat-label">Players competed</span></li>
+      <li><span class="stat-value" id="stat-coins">&ndash;&ndash;</span><span class="stat-label">Int Coins awarded</span></li>
+    </ul>
+    <p class="kicker champions-kicker" id="champions-kicker" hidden>Hall of champions</p>
+    <ol class="champions-list" id="champions-list" aria-label="Recent tournament champions"></ol>
+  </div>
+</section>
+
+<!-- band-raised, not band-recessed: #community before this and #between-games
+     after it are both recessed, and three recessed bands in a row read as one
+     undifferentiated block. Raised breaks the run the same way .join does at
+     the bottom of the page. -->
+<section id="watch-live" class="band band-raised" aria-label="Watch live">
   <div class="wrap">
     <h2>Watch live, get drops</h2>
     <p>Matches stream live in Discord, free for anyone to watch. We drop in-server rewards during hype moments, so tuning in pays off. Missed it? Highlights land on <a href="https://www.youtube.com/@literallyjustacontentchannel" target="_blank" rel="noopener noreferrer">YouTube</a> afterward.</p>
+  </div>
+  <div class="wrap-wide">
+    <div class="video-embed">
+      <iframe src="https://www.youtube.com/embed/videoseries?list=UUOP6cBcz2XO_4ytthVuVktw" title="Latest uploads from Starling on YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
   </div>
 </section>
 
@@ -990,6 +1177,7 @@
   // schedule hard-coded in this file, and the schedule in the database used to be
   // three different things, and only the database was ever right.
   var FEED = "https://rexerserver.tail1b6fea.ts.net/api/next-event.json";
+  var COMMUNITY_FEED = "https://rexerserver.tail1b6fea.ts.net/api/community-stats.json";
   var REFRESH_MS = 5 * 60 * 1000;
 
   var el = {
@@ -1186,10 +1374,14 @@
     show(el.note, true);
 
     var upcoming = (data.upcoming || []).filter(function (e) { return e.starts_at; });
-    if (upcoming.length) {
-      setText(el.then, "Then: " + upcoming.map(function (e) {
-        return e.name + " · " + shortDate(e.starts_at);
-      }).join("   ·   "));
+    var thenList = document.getElementById("then-list");
+    if (upcoming.length && thenList) {
+      thenList.innerHTML = "";
+      upcoming.forEach(function (e) {
+        var li = document.createElement("li");
+        li.textContent = e.name + " · " + shortDate(e.starts_at);
+        thenList.appendChild(li);
+      });
       show(el.then, true);
     } else {
       show(el.then, false);
@@ -1207,6 +1399,66 @@
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
       .then(render)
       .catch(renderUnavailable);
+  }
+
+  var communityEl = {
+    section: document.getElementById("community"),
+    tournaments: document.getElementById("stat-tournaments"),
+    players: document.getElementById("stat-players"),
+    coins: document.getElementById("stat-coins"),
+    champKicker: document.getElementById("champions-kicker"),
+    champList: document.getElementById("champions-list"),
+    liveBadge: document.getElementById("live-badge"),
+    liveCount: document.getElementById("live-count")
+  };
+
+  // No placeholder numbers, same rule as the event panel: a brand-new server
+  // with nothing completed yet shows no section at all rather than a row of
+  // zeroes, and the member badge only appears once the bot actually reports
+  // a count.
+  function renderCommunity(data) {
+    var stats = data && data.stats;
+    var champions = (data && data.champions) || [];
+    var hasStats = !!stats && (stats.tournaments_run > 0 || champions.length > 0);
+
+    if (communityEl.section) {
+      communityEl.section.style.display = hasStats ? "block" : "none";
+    }
+    if (hasStats) {
+      setText(communityEl.tournaments, String(stats.tournaments_run));
+      setText(communityEl.players, String(stats.players_competed));
+      setText(communityEl.coins, stats.prize_distributed_coins.toLocaleString());
+
+      if (communityEl.champList) {
+        communityEl.champList.innerHTML = "";
+        champions.forEach(function (c) {
+          var li = document.createElement("li");
+          li.className = "champion-row";
+          var team = document.createElement("span");
+          team.className = "champion-team";
+          team.textContent = c.team_name;
+          var meta = document.createElement("span");
+          meta.className = "champion-meta";
+          meta.textContent = c.tournament_name + (c.completed_at ? " · " + shortDate(c.completed_at) : "");
+          li.appendChild(team);
+          li.appendChild(meta);
+          communityEl.champList.appendChild(li);
+        });
+      }
+      show(communityEl.champKicker, champions.length > 0);
+    }
+
+    if (typeof data.member_count === "number") {
+      setText(communityEl.liveCount, data.member_count.toLocaleString() + " members");
+      show(communityEl.liveBadge, true);
+    }
+  }
+
+  function loadCommunity() {
+    fetch(COMMUNITY_FEED, { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(renderCommunity)
+      .catch(function () { /* stays hidden -- never show a stale or invented count */ });
   }
 
   // The run arrives left to right when it scrolls into view, which is the shape
@@ -1258,10 +1510,12 @@
   });
 
   load();
+  loadCommunity();
   setInterval(load, REFRESH_MS);
+  setInterval(loadCommunity, REFRESH_MS);
   // A tab left open overnight should not still be showing yesterday's state.
   document.addEventListener("visibilitychange", function () {
-    if (!document.hidden) { load(); }
+    if (!document.hidden) { load(); loadCommunity(); }
   });
 })();
 </script>
