@@ -76,6 +76,14 @@
       },
       {
         "@type": "Question",
+        "name": "What if I get bad teammates?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Every event ends with an honor vote on the people you played with, and that reputation follows a player into the next one, so behaviour here has a memory. Accounts that look stronger than they claim get a smurf check before the draft, and organisers can hold someone out of an event over their record."
+        }
+      },
+      {
+        "@type": "Question",
         "name": "Is it actually free?",
         "acceptedAnswer": {
           "@type": "Answer",
@@ -227,9 +235,12 @@
       line-height: 1.65;
     }
 
+    /* The parts nobody draws still belong to the palette. */
+    ::selection { background: var(--accent); color: var(--rig-black); }
+
     a { color: var(--crimson-link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
     a:hover { text-decoration-thickness: 2px; color: var(--accent-hover); }
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     a[target="_blank"]::after {
       content: "\2197";
@@ -254,6 +265,15 @@
        Champions/stat band. A heading or a lede stays in .wrap even inside a
        section that also uses this; only the evidentiary block itself moves. */
     .wrap-wide { max-width: 100rem; margin: 1.5rem auto 0; padding: 0 1.25rem; }
+    /* The wide tier only earns its keep once it can step out by enough to read as
+       a tier. Below 1600px viewport it was outdenting the bracket by 16px against
+       every heading and caption on the page -- too small to look deliberate, big
+       enough to look like a bug on the one surface whose whole identity is a ruled
+       panel. Under that width it simply matches .wrap and the left rule is
+       unbroken; at 1920 the step is 96px and reads as intended. */
+    @media (max-width: 1599px) {
+      .wrap-wide { max-width: 88rem; }
+    }
 
     /* Tonal rhythm: full-bleed bands using the system's Ground / Raised / Recessed
        vocabulary, bounded by hairlines. Never a shadow, never a gap. */
@@ -366,6 +386,7 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--muted);
+      font-variant-numeric: tabular-nums;
     }
     .live-badge-dot {
       width: 0.5rem;
@@ -383,6 +404,9 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
+      /* #join-kicker carries a live date off the feed, so it is a changing number
+         like every other one in the system. */
+      font-variant-numeric: tabular-nums;
     }
     h1 {
       font-family: "Bebas Neue", sans-serif;
@@ -474,6 +498,10 @@
       margin: 0.5rem 0 0.55rem;
       color: var(--ink);
       max-width: none;
+      /* Tournament names are typed by an organiser, so this string is not under
+         the page's control: an arc name with no spaces has to wrap rather than
+         push the panel wider than its column. */
+      overflow-wrap: anywhere;
     }
     .ticket .when {
       font-family: "Rajdhani", sans-serif;
@@ -510,7 +538,6 @@
       font-size: var(--t-meta);
       color: var(--text-primary);
     }
-    .ticket .prize strong { color: var(--gold-bright); font-weight: 600; }
     .ticket .then {
       margin-top: 0.9rem;
       padding-top: 0.8rem;
@@ -601,6 +628,11 @@
         grid-auto-flow: row;
         grid-template-columns: 1fr;
       }
+      /* Third telling of one story. The five cards above already state the run
+         match by match and legibly at this width; the bracket below it carries
+         its own line. On a phone this paragraph was pure repetition sitting at
+         the page's longest scroll. */
+      .run-caption { display: none; }
     }
     .match {
       position: relative;
@@ -623,6 +655,10 @@
     .match[data-outcome="loss"]::before { background: var(--line); }
     .match[data-outcome="title"]::before { background: var(--gold-bright); }
     .match-round {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.6rem;
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
       font-size: var(--t-micro);
@@ -634,6 +670,15 @@
       white-space: nowrap;
     }
     .match[data-outcome="title"] .match-round { color: var(--gold-bright); }
+    /* The stripe already encodes this match's outcome, but only for someone who
+       has learned the stripe. The tint on the winning row belongs to whoever won
+       that match, which in the first card is the opponent -- so a person skimming
+       five cards watches the bright name flip sides and cannot tell whose run
+       they are reading. This names the outcome from the subject team's side, in
+       the same accents the stripe uses. */
+    .match-flag { color: var(--accent-hover); }
+    .match[data-outcome="loss"] .match-flag { color: var(--muted); }
+    .match[data-outcome="title"] .match-flag { color: var(--gold-bright); }
     .team {
       display: flex;
       align-items: center;
@@ -679,11 +724,31 @@
       display: block;
       width: 100%;
       height: auto;
-      margin-top: 1.5rem;
       border: 1px solid var(--line);
       border-radius: 10px;
     }
-    figcaption { margin-top: 1rem; font-size: var(--t-meta); color: var(--muted); max-width: 62ch; }
+    /* At 390px this image renders 123px tall and its team names land near 4px:
+       real evidence on a desktop, texture on the viewport most people arrive on.
+       Making the whole figure a link turns it from a dead rectangle into the way
+       to actually read it, without hiding the artifact or changing the desktop
+       composition. */
+    .bracket-link {
+      display: block;
+      margin-top: 1.5rem;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+    .bracket-link:hover .bracket-img { border-color: var(--accent-hover); }
+    .bracket-hint {
+      display: block;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.75rem;
+    }
 
     /* the other things to do: a pill row instead of buried prose */
     .pill-row {
@@ -693,6 +758,12 @@
       gap: 0.6rem;
       margin-top: 1.5rem;
     }
+    /* Squared off, not pills. In this system a pill marks state, and state is
+       something a person can act on -- so a row of fully-round, panel-filled,
+       Rajdhani-caps chips was indistinguishable from the interactive chips the
+       rest of the product uses, and on a phone people tap them. These are
+       labels naming what else is in the server; the 3px chip radius is the
+       system's own form for a squared-off label at this height. */
     .pill-row li {
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
@@ -702,7 +773,7 @@
       color: var(--text-primary);
       background: var(--rig-panel);
       border: 1px solid var(--line);
-      border-radius: 999px;
+      border-radius: 3px;
       padding: 0.45rem 0.95rem;
     }
 
@@ -801,6 +872,16 @@
       .steps::before { left: 3rem; }
     }
 
+    /* At 320px the masthead's own button wrapped onto two lines, which the note
+       above already calls broken -- it just could not be seen until the badge was
+       out of the way. The label sheds a word instead of the button shedding its
+       shape; it still reads as a full instruction and stays the same target. */
+    @media (max-width: 380px) {
+      .masthead { gap: 0.5rem; }
+      .masthead a.discord { padding: 0 0.7rem; letter-spacing: 0.06em; }
+      .masthead a.discord .mast-mid { display: none; }
+    }
+
     /* community track record: aggregate totals plus a champion-by-champion
        list, both driven by /api/community-stats.json. Hidden by default and
        only shown once real data lands (see the script block) -- a brand-new
@@ -812,11 +893,12 @@
       display: grid;
       /* auto-fit per the system's own stat-tile grid rule (collapses to one
          column on a narrow phone). The row's own max-width is capped
-         separately so three real tiles read as tiles on the wider .wrap
-         measure instead of stretching into three sparse giants. */
+         separately so the tiles read as tiles on the wider .wrap measure
+         instead of stretching into sparse giants -- tightened when the coins
+         stat was dropped and two tiles were left splitting a three-tile cap. */
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1rem;
-      max-width: 44rem;
+      max-width: 30rem;
       margin-top: 2rem;
     }
     .stat-row li {
@@ -858,6 +940,9 @@
       padding: 0.85rem 0 0.85rem 1rem;
       border-bottom: 1px solid var(--divider);
     }
+    /* Internal dividers separate rows from each other; the list already has its
+       own top rule, so a hairline under the last row closed onto nothing. */
+    .champion-row:last-child { border-bottom: none; }
     .champion-row::before {
       content: "";
       position: absolute;
@@ -878,6 +963,7 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--gold-bright);
+      font-variant-numeric: tabular-nums;
     }
     .champion-team {
       display: block;
@@ -886,22 +972,77 @@
       font-weight: 700;
       font-size: var(--t-lead);
       color: var(--ink);
+      /* Team names are typed by players. Emoji, no spaces, 40 characters: all of
+         it has to wrap inside the row rather than push the band sideways. */
+      overflow-wrap: anywhere;
     }
 
-    /* watch-live: a real embed instead of a "check YouTube" paragraph. The
-       16:9 box is held with padding-top so the iframe never reflows the page
-       while it loads. */
+    /* watch-live: the latest highlights reel, behind a facade rather than a live
+       embed. The iframe itself is 4.2MB across 15 requests -- 95% of this page's
+       entire weight -- and it loaded on arrival whether or not anyone scrolled to
+       it, because Chromium's lazy-load threshold is wide enough not to hold it
+       back. It also arrived carrying YouTube's own chrome and a second exit on a
+       page with exactly one destination. Nothing about the video changes: the
+       playlist is still the channel's uploads feed, so it is still whatever went
+       up last. It just does not cost anything until someone asks for it.
+       On .wrap rather than .wrap-wide and capped: at the wide measure it rendered
+       790px tall, larger than the hero, on the page whose one job is the join. */
     .video-embed {
       position: relative;
       width: 100%;
-      padding-top: 56.25%;
+      max-width: 46rem;
+      aspect-ratio: 16 / 9;
       margin-top: 1.5rem;
-      background: var(--rig-panel);
+      background: var(--rig-rail);
       border: 1px solid var(--line);
       border-radius: 10px;
       overflow: hidden;
     }
     .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-facade {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+      width: 100%;
+      background-color: var(--rig-rail);
+      background-image: var(--rig-texture);
+      background-size: var(--rig-texture-size, auto);
+      border: 0;
+      font: inherit;
+      color: var(--ink);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    /* The global external-link arrow would land as a third flex item in the
+       middle of the facade; the mark already says where this goes. */
+    .video-facade[target="_blank"]::after { content: none; }
+    .video-facade-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: var(--rig-panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .video-facade-mark svg { width: 1.15rem; height: 1.15rem; fill: var(--accent); }
+    .video-facade-label {
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+    .video-facade:hover .video-facade-mark { background: var(--rig-line); border-color: var(--accent-hover); }
+    .video-facade:hover .video-facade-label { color: var(--ink); }
 
     /* the upcoming strip: was one run-on text line ("Then: A · date  ·  B ·
        date"), now a small row of chips so a second and third event actually
@@ -926,12 +1067,20 @@
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
       font-size: var(--t-small);
+      font-variant-numeric: tabular-nums;
       color: var(--text-primary);
       background: var(--rig-black);
       border: 1px solid var(--divider);
-      border-radius: 999px;
+      /* Squared for the same reason .pill-row is: these name a future event, they
+         are not a state the visitor can act on. */
+      border-radius: 3px;
       padding: 0.3rem 0.75rem;
+      /* The name comes from the feed, so it can be longer than the panel. Clip it
+         rather than let one arc name widen the ticket. */
       white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   </style>
 </head>
@@ -941,7 +1090,10 @@
   <div class="wrap masthead">
     <a class="wordmark" href="/">STARLING<span class="wm-tld">.GG</span></a>
     <span class="live-badge" id="live-badge" hidden><span class="live-badge-dot" aria-hidden="true"></span><span id="live-count"></span></span>
-    <a class="discord" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
+    <!-- The label is one span, not three text nodes: this anchor is an inline-flex
+         box, so bare words would each become their own flex item and the spaces
+         between them would be dropped ("JOINTHEDISCORD"). -->
+    <a class="discord" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer"><span>Join<span class="mast-mid"> the</span> Discord</span></a>
   </div>
 </header>
 
@@ -962,19 +1114,32 @@
          There is deliberately no hard-coded date in this markup: a date baked into
          a static page is wrong the first time an event moves, and a panel that goes
          quiet is better than a panel that lies. -->
+    <!-- The markup's own state is the honest fallback, not a spinner. With no JS,
+         a blocked fetch or a bot that is down, this panel already reads correctly
+         and says only things that are true on any day; the feed replaces it with
+         specifics when it lands. It used to sit on "Checking the server / One
+         moment." with the real fallback text living inside renderUnavailable(),
+         which meant a visitor without JS got a permanent loading state. -->
     <div class="ticket" id="event-panel" data-state="unknown" aria-live="polite">
       <p class="eyebrow" id="event-eyebrow">Next tournament</p>
       <span class="state-chip" id="event-chip" hidden></span>
-      <p class="ticket-title" id="event-title">Checking the server</p>
-      <p class="when" id="event-when">One moment.</p>
+      <p class="ticket-title" id="event-title">Announced in the server</p>
+      <p class="when" id="event-when">Events run every three weeks on Saturdays, 3:30 PM Central.</p>
       <div class="countdown" id="countdown" aria-hidden="true" hidden>
         <div class="countdown-unit"><span class="countdown-value" id="cd-days">&ndash;&ndash;</span><span class="countdown-label">Days</span></div>
         <div class="countdown-unit"><span class="countdown-value" id="cd-hours">&ndash;&ndash;</span><span class="countdown-label">Hrs</span></div>
         <div class="countdown-unit"><span class="countdown-value" id="cd-mins">&ndash;&ndash;</span><span class="countdown-label">Min</span></div>
         <div class="countdown-unit" id="cd-secs-unit"><span class="countdown-value" id="cd-secs">&ndash;&ndash;</span><span class="countdown-label">Sec</span></div>
       </div>
-      <p class="note" id="event-note" hidden></p>
-      <p class="note prize">Winner takes a <strong>Hextech chest and key</strong>, covered by the server owner.</p>
+      <p class="note" id="event-note">Join the Discord and the next date lands in your announcements channel.</p>
+      <!-- No prize line here. It was the one thing in this panel that was not
+           read off the feed -- a standing claim that the winner takes a specific
+           in-game reward, in a panel built specifically so nothing could go stale
+           or overstate. It also contradicted the FAQ, which says correctly that
+           some events carry no prize. What a given event is worth is named on
+           that event's registration announcement; the FAQ says so and can stay
+           true. Restoring a concrete claim here means putting the prize on
+           /api/next-event.json, not back into the markup. -->
       <div class="then" id="event-then" hidden>
         <span class="then-label">Then</span>
         <ul class="then-list" id="then-list"></ul>
@@ -995,7 +1160,7 @@
       <li>
         <div>
           <strong>Sign up with your Riot ID</strong>
-          <p>Click Register on the announcement and enter your Riot ID. That's the whole signup.</p>
+          <p>Every event goes up as an announcement in the server. Click Register on it and enter your Riot ID. That's the whole signup.</p>
         </div>
       </li>
       <li>
@@ -1007,13 +1172,19 @@
       <li>
         <div>
           <strong>Get drafted</strong>
-          <p>Teams are balanced by estimated MMR so games stay close, and you're placed in the role you asked for whenever the numbers allow it.</p>
+          <p>Teams are balanced by estimated MMR, the matchmaking rating read off your ranked history, so games stay close. You're placed in the role you asked for whenever the numbers allow it.</p>
         </div>
       </li>
       <li>
         <div>
           <strong>Play the bracket</strong>
           <p>Matches run back to back through the evening. Moderators report results in Discord and the bracket updates as you go.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Honor your teammates</strong>
+          <p>When the night ends, everyone gets a quick vote on the people they played with. That reputation follows a player into the next event, so how you treat four strangers actually counts for something here.</p>
         </div>
       </li>
     </ol>
@@ -1030,27 +1201,27 @@
          the table. -->
     <ol class="run" id="run" aria-label="Krugalicious' run at Run It Back, match by match">
       <li class="match" data-outcome="loss" style="--i:0">
-        <p class="match-round">Winners R1</p>
+        <p class="match-round">Winners R1 <span class="match-flag">Loss</span></p>
         <div class="team">Krugalicious</div>
         <div class="team is-winner">NCTEB<span class="vh"> won</span></div>
       </li>
       <li class="match" data-outcome="win" style="--i:1">
-        <p class="match-round">Losers R1</p>
+        <p class="match-round">Losers R1 <span class="match-flag">Win</span></p>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
         <div class="team">Baddies</div>
       </li>
       <li class="match" data-outcome="win" style="--i:2">
-        <p class="match-round">Losers R2</p>
+        <p class="match-round">Losers R2 <span class="match-flag">Win</span></p>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
         <div class="team">The Lil Guys</div>
       </li>
       <li class="match" data-outcome="win" style="--i:3">
-        <p class="match-round">Grand Finals</p>
+        <p class="match-round">Grand Finals <span class="match-flag">Win</span></p>
         <div class="team">NCTEB</div>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
       </li>
       <li class="match" data-outcome="title" style="--i:4">
-        <p class="match-round">Bracket Reset</p>
+        <p class="match-round">Bracket Reset <span class="match-flag">Title</span></p>
         <div class="team">NCTEB</div>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
       </li>
@@ -1058,11 +1229,14 @@
   </div>
   <div class="wrap-wide">
     <figure>
-      <picture>
-        <source srcset="bracket.webp" type="image/webp">
-        <img class="bracket-img" src="bracket.png" width="2992" height="1042" loading="lazy" decoding="async"
-             alt="The completed Run It Back bracket. Krugalicious lose to NCTEB in the winners bracket, win two losers-bracket matches against Baddies and The Lil Guys, then beat NCTEB in both the Grand Finals and the bracket reset to become champion." />
-      </picture>
+      <a class="bracket-link" href="bracket.webp">
+        <picture>
+          <source srcset="bracket.webp" type="image/webp">
+          <img class="bracket-img" src="bracket.png" width="2992" height="1042" loading="lazy" decoding="async"
+               alt="The completed Run It Back bracket. Krugalicious lose to NCTEB in the winners bracket, win two losers-bracket matches against Baddies and The Lil Guys, then beat NCTEB in both the Grand Finals and the bracket reset to become champion." />
+        </picture>
+        <span class="bracket-hint">Open the full bracket</span>
+      </a>
     </figure>
   </div>
   <div class="wrap">
@@ -1095,10 +1269,19 @@
   <div class="wrap">
     <h2>Watch live, get drops</h2>
     <p>Matches stream live in Discord, free for anyone to watch. We drop in-server rewards during hype moments, so tuning in pays off. Missed it? Highlights land on <a href="https://www.youtube.com/@literallyjustacontentchannel" target="_blank" rel="noopener noreferrer">YouTube</a> afterward.</p>
-  </div>
-  <div class="wrap-wide">
-    <div class="video-embed">
-      <iframe src="https://www.youtube.com/embed/videoseries?list=UUOP6cBcz2XO_4ytthVuVktw" title="Latest uploads from Starling on YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <div class="video-embed" id="video-embed"
+         data-src="https://www.youtube.com/embed/videoseries?list=UUOP6cBcz2XO_4ytthVuVktw&autoplay=1">
+      <!-- An anchor, not a button, so this still works with no JS: it goes to the
+           playlist on YouTube. With JS the click is intercepted and the player is
+           embedded in place instead. -->
+      <a class="video-facade" id="video-facade"
+         href="https://www.youtube.com/playlist?list=UUOP6cBcz2XO_4ytthVuVktw"
+         target="_blank" rel="noopener noreferrer">
+        <span class="video-facade-mark" aria-hidden="true">
+          <svg viewBox="0 0 12 14" xmlns="http://www.w3.org/2000/svg"><path d="M0 0 L12 7 L0 14 Z"/></svg>
+        </span>
+        <span class="video-facade-label">Play the latest highlights</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1125,6 +1308,10 @@
     <details>
       <summary>Do I need a full team to sign up?</summary>
       <p class="answer"><span>No. Register solo or with one duo partner, and Starling drafts you onto a balanced team of five. Showing up without a squad is normal, not a workaround. Clan tournaments for full premade teams are coming.</span></p>
+    </details>
+    <details>
+      <summary>What if I get bad teammates?</summary>
+      <p class="answer"><span>Every event ends with an honor vote on the people you played with, and that reputation follows a player into the next one, so behaviour here has a memory. Accounts that look stronger than they claim get a smurf check before the draft, and organisers can hold someone out of an event over their record.</span></p>
     </details>
     <details>
       <summary>Is it actually free?</summary>
@@ -1389,22 +1576,30 @@
     var upcoming = (data.upcoming || []).filter(function (e) { return e.starts_at; });
     var thenList = document.getElementById("then-list");
     if (upcoming.length && thenList) {
-      thenList.innerHTML = "";
-      upcoming.forEach(function (e) {
-        var li = document.createElement("li");
-        li.textContent = e.name + " · " + shortDate(e.starts_at);
-        thenList.appendChild(li);
-      });
+      // Rebuilt only when the schedule actually changed. This list lives inside
+      // the panel's aria-live region, and it used to be torn down and recreated
+      // on every 5-minute poll and every tab focus regardless of content, which
+      // re-announced the same two dates to a screen reader forever. Every other
+      // node in here is guarded by setText's equality check; this is that guard.
+      var labels = upcoming.map(function (e) { return e.name + " · " + shortDate(e.starts_at); });
+      var signature = labels.join("|");
+      if (thenList.getAttribute("data-signature") !== signature) {
+        thenList.innerHTML = "";
+        labels.forEach(function (label) {
+          var li = document.createElement("li");
+          li.textContent = label;
+          thenList.appendChild(li);
+        });
+        thenList.setAttribute("data-signature", signature);
+      }
       show(el.then, true);
     } else {
       show(el.then, false);
     }
 
-    if (el.joinKicker) {
-      el.joinKicker.textContent = event.state === "live"
-        ? event.name + " is being played right now"
-        : "Next up: " + event.name + ", " + shortDate(event.starts_at);
-    }
+    setText(el.joinKicker, event.state === "live"
+      ? event.name + " is being played right now"
+      : "Next up: " + event.name + ", " + shortDate(event.starts_at));
   }
 
   function load() {
@@ -1522,6 +1717,29 @@
       }
     });
   });
+
+  // The highlights player is not embedded until someone asks for it. The iframe
+  // costs 4.2MB across 15 requests and loaded on arrival even with loading="lazy",
+  // which is most of this page's weight spent on a section most visitors scroll
+  // past. Without JS the facade is just a link to the playlist.
+  (function highlightsFacade() {
+    var box = document.getElementById("video-embed");
+    var facade = document.getElementById("video-facade");
+    if (!box || !facade || !box.getAttribute("data-src")) { return; }
+    facade.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      var frame = document.createElement("iframe");
+      frame.src = box.getAttribute("data-src");
+      frame.title = "Latest highlights from Starling on YouTube";
+      frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      frame.setAttribute("allowfullscreen", "");
+      box.replaceChild(frame, facade);
+      // The player replaced the control that was focused, so move focus into it
+      // rather than dropping it to the top of the document.
+      frame.setAttribute("tabindex", "-1");
+      frame.focus();
+    });
+  })();
 
   load();
   loadCommunity();
