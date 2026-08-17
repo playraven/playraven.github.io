@@ -418,6 +418,15 @@
       max-width: 15ch;
       text-wrap: pretty; /* keeps "TEAM." from stranding on a line of its own */
     }
+    /* 15ch is a phone measure: it exists so "A TEAM." never orphans at 320px.
+       On a desktop it was costing a third line and leaving "LEAVE WITH" hanging
+       with the right third of its own column empty, so the second sentence gets
+       a line of its own from the same width the hero grid splits at. */
+    .hero-break { display: none; }
+    @media (min-width: 900px) {
+      h1 { max-width: 20ch; }
+      .hero-break { display: inline; }
+    }
     /* 2.5rem above, 1.1rem below. The margin below collapses with the 2rem on
        .steps / .faq / .run, so the real gap under a heading tops out at 2rem and
        the space above it always wins. */
@@ -737,37 +746,75 @@
       margin-top: 0.75rem;
     }
 
-    /* the other things to do: a pill row instead of buried prose */
-    .pill-row {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-top: 1.5rem;
+    /* The between-games showcase. This section used to name five whole game
+       systems as five text chips, which was the weakest thing on the page: the
+       artifacts that actually recruit people are the ones that travel in a
+       screenshot, and the page was showing exactly one of them (the bracket)
+       and making it carry everything. These are real clan badges out of the
+       live database, rendered through the same PIL path the bot uses. */
+    .showcase {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+      align-items: start;
     }
-    /* Squared off, not pills. In this system a pill marks state, and state is
-       something a person can act on -- so a row of fully-round, panel-filled,
-       Rajdhani-caps chips was indistinguishable from the interactive chips the
-       rest of the product uses, and on a phone people tap them. These are
-       labels naming what else is in the server; the 3px chip radius is the
-       system's own form for a squared-off label at this height. */
-    .pill-row li {
+    @media (min-width: 820px) {
+      .showcase { grid-template-columns: 17rem 1fr; gap: 3rem; }
+    }
+    .showcase-art { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .showcase-art img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .showcase-art figcaption {
+      margin-top: 0.5rem;
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
       font-size: var(--t-micro);
-      letter-spacing: 0.06em;
+      line-height: 1.3;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--text-primary);
-      background: var(--rig-panel);
-      border: 1px solid var(--line);
-      border-radius: 3px;
-      padding: 0.45rem 0.95rem;
+      color: var(--muted);
+      /* Holds two lines so a longer clan name does not drop its own caption
+         below the other one and stagger the block underneath. */
+      min-height: 2.6em;
     }
+    .showcase-note {
+      grid-column: 1 / -1;
+      margin-top: -0.25rem;
+      font-size: var(--t-small);
+      color: var(--muted);
+    }
+    .showcase-list { list-style: none; border-top: 1px solid var(--line); }
+    .showcase-list li { padding: 1.1rem 0; border-bottom: 1px solid var(--divider); }
+    .showcase-list li:last-child { border-bottom: none; }
+    /* --t-lead is 20px, which is the floor this display face is allowed at. */
+    .showcase-list strong {
+      display: block;
+      font-family: "Bebas Neue", sans-serif;
+      font-weight: 400;
+      font-size: var(--t-lead);
+      letter-spacing: 0.03em;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+    .showcase-list p { font-size: var(--t-meta); color: var(--muted); max-width: 58ch; }
 
     /* faq: collapsed by default, matching the page's "decide fast" job.
        Not a <dl>: a definition list whose items are <details> carrying a <dd> with
        no <dt> is invalid, and hands a screen reader descriptions with no terms. */
-    .faq { margin-top: 2rem; border-top: 1px solid var(--line); }
+    .faq { margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 0; }
+    @media (min-width: 900px) {
+      .faq { grid-template-columns: 1fr 1fr; gap: 0 3rem; }
+    }
+    .faq-col { border-top: 1px solid var(--line); }
+    /* Stacked, the second column's top rule would land directly under the first
+       column's last row rule and read as a 2px line. */
+    @media (max-width: 899px) { .faq-col + .faq-col { border-top: none; } }
     .faq details { border-bottom: 1px solid var(--divider); }
     .faq summary {
       padding: 1.1rem 0;
@@ -821,6 +868,11 @@
     /* The kicker leads this section, so its own top space stays in the padding;
        the h2 under it keeps the standard 2.5rem from the rule above. */
     section.band-raised.join { padding: 3.5rem 0 4.5rem; }
+    /* The close carries more weight without a second display-size heading: this
+       system allows exactly one per page and the hero has it. The lede steps up
+       one ramp position and the commit control gets bigger instead. */
+    .join-lede { font-size: var(--t-lead); line-height: 1.5; max-width: 46ch; }
+    section.band-raised.join .cta { font-size: var(--t-lead); padding: 0.75rem 2.2rem; }
 
     footer {
       border-top: 1px solid var(--line);
@@ -925,7 +977,19 @@
       color: var(--muted);
     }
     .champions-kicker { margin-top: 2.5rem; }
-    .champions-list { list-style: none; margin-top: 1rem; border-top: 1px solid var(--line); }
+    /* A grid of peers, not a stack of full-width rows. As rows, each champion was
+       a 1368px hairline carrying about 190px of content hard against the left
+       edge, three times over -- and the live feed returns six, so it got worse
+       with every event. The measure is capped rather than filling .wrap: at the
+       full width the cards themselves would be as empty as the rows were. */
+    .champions-list {
+      list-style: none;
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 0.75rem;
+      max-width: 60rem;
+    }
     /* Stacked, not a name-left/date-right row: a bare team name told a stranger
        nothing, and a flex space-between row with the stripe counted as a flex
        item drifted the name to a different x per row instead of a fixed left
@@ -934,20 +998,19 @@
        page -- so it can never compete for layout space again. */
     .champion-row {
       position: relative;
-      padding: 0.85rem 0 0.85rem 1rem;
-      border-bottom: 1px solid var(--divider);
+      padding: 0.85rem 1rem 0.9rem 1.4rem;
+      background: var(--rig-panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
     }
-    /* Internal dividers separate rows from each other; the list already has its
-       own top rule, so a hairline under the last row closed onto nothing. */
-    .champion-row:last-child { border-bottom: none; }
     .champion-row::before {
       content: "";
       position: absolute;
       left: 0;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 0;
+      bottom: 0;
       width: 4px;
-      height: 2.2rem;
+      border-radius: 6px 0 0 6px;
       /* Gold marks a win, same rule the bracket renderer and the ticket's
          prize line both follow -- nothing else on the page gets this hue. */
       background: var(--gold-bright);
@@ -1040,6 +1103,20 @@
     }
     .video-facade:hover .video-facade-mark { background: var(--rig-line); border-color: var(--accent-hover); }
     .video-facade:hover .video-facade-label { color: var(--ink); }
+    /* The copy sits beside the player rather than above it. Stacked, this band
+       left a third of the page empty next to a 736px block, which is the same
+       shape of dead space the champions list had. */
+    @media (min-width: 900px) {
+      .watch-grid {
+        display: grid;
+        grid-template-columns: 1fr 44rem;
+        gap: 0 3rem;
+        align-items: center;
+        padding-top: 2.5rem;
+      }
+      .watch-grid h2 { margin-top: 0; }
+      .watch-grid .video-embed { margin-top: 0; max-width: none; }
+    }
 
     /* the upcoming strip: was one run-on text line ("Then: A · date  ·  B ·
        date"), now a small row of chips so a second and third event actually
@@ -1068,8 +1145,8 @@
       color: var(--text-primary);
       background: var(--rig-black);
       border: 1px solid var(--divider);
-      /* Squared for the same reason .pill-row is: these name a future event, they
-         are not a state the visitor can act on. */
+      /* Squared, not a pill: these name a future event, they are not a state the
+         visitor can act on. */
       border-radius: 3px;
       padding: 0.3rem 0.75rem;
       /* The name comes from the feed, so it can be longer than the panel. Clip it
@@ -1103,8 +1180,13 @@
            sentence wearing a label's clothes: 40 characters of 12px tracked caps
            saying what the lede says in full sentences one line later. The page
            keeps exactly one kicker, the data-driven one above the closing CTA. -->
-      <h1>Show up alone. Leave with a team.</h1>
-      <p class="lede">Free 5v5 tournaments, run start to finish on Discord. Starling verifies your Riot account, drafts both sides by estimated MMR so the teams come in even, and keeps the bracket moving while you play. No signup form, no downloads, no premade required.</p>
+      <!-- The break is authored, not left to the wrapper. Given the room, the
+           browser balanced this as "SHOW UP ALONE. LEAVE / WITH A TEAM.", which
+           splits a clause; the line is built on two sentences answering each
+           other, so that is where it breaks. Hidden on a phone, where the
+           measure forces its own wrap anyway. -->
+      <h1>Show up alone.<br class="hero-break"> Leave with a team.</h1>
+      <p class="lede">Free 5v5 tournaments, run start to finish on Discord. Teams are drafted by estimated MMR, so the games come in close. No signup form, no downloads, no premade required.</p>
     </div>
 
     <!-- The event panel is populated from the bot's live feed and nothing else.
@@ -1191,7 +1273,7 @@
 <section id="bracket" aria-label="A finished bracket">
   <div class="wrap">
     <h2>Everyone gets a second life</h2>
-    <p>Every tournament is double elimination. Losing a match drops you into the losers bracket, where you can fight all the way back to the Grand Finals.</p>
+    <p>Every tournament is double elimination: losing drops you into the losers bracket, where you can fight all the way back to the Grand Finals.</p>
     <!-- The cards below are one team's run, and until this sentence existed the
          page never said so. Without an owner, the tint on the winning row (which
          belongs to whoever won that match, so it changes sides) reads as five
@@ -1270,9 +1352,11 @@
      undifferentiated block. Raised breaks the run the same way .join does at
      the bottom of the page. -->
 <section id="watch-live" class="band band-raised" aria-label="Watch live">
-  <div class="wrap">
-    <h2>Watch live, get drops</h2>
-    <p>Matches stream live in Discord, free for anyone to watch. We drop in-server rewards during hype moments, so tuning in pays off. Missed it? Highlights land on <a href="https://www.youtube.com/@literallyjustacontentchannel" target="_blank" rel="noopener noreferrer">YouTube</a> afterward.</p>
+  <div class="wrap watch-grid">
+    <div class="watch-copy">
+      <h2>Watch live, get drops</h2>
+      <p>Matches stream live in Discord, free to watch, with in-server rewards dropping during the good bits. Highlights land on <a href="https://www.youtube.com/@literallyjustacontentchannel" target="_blank" rel="noopener noreferrer">YouTube</a> afterward.</p>
+    </div>
     <div class="video-embed" id="video-embed"
          data-src="https://www.youtube.com/embed/videoseries?list=UUOP6cBcz2XO_4ytthVuVktw&autoplay=1">
       <!-- An anchor, not a button, so this still works with no JS: it goes to the
@@ -1295,20 +1379,52 @@
 <section id="between-games" class="band band-recessed" aria-label="Between games">
   <div class="wrap">
     <h2>Something to do while you wait</h2>
-    <p>The server doesn't go quiet between tournaments. Small games fill the gaps, whether you're in champ select or waiting for people to log on, and they add up to real progress: climb your MMR profile, grow a clan badge worth flexing, and stack Int Coins from dailies, drops and games.</p>
-    <ul class="pill-row">
-      <li>Dungeon crawler</li>
-      <li>Trading cards</li>
-      <li>Clans</li>
-      <li>Daily Wordle</li>
-      <li>Music in voice</li>
-    </ul>
+    <p>The server doesn't go quiet between tournaments. The off weeks are where people actually get to know each other.</p>
+
+    <div class="showcase">
+      <div class="showcase-art">
+        <figure>
+          <img src="badge-satsuma.webp" width="256" height="256" loading="lazy" decoding="async"
+               alt="Satsuma's clan badge: white condensed lettering reading SAT on a black square, on an emerald field." />
+          <figcaption>Satsuma &middot; level 4</figcaption>
+        </figure>
+        <figure>
+          <img src="badge-pixels.webp" width="256" height="256" loading="lazy" decoding="async"
+               alt="Pixel's Bakery's clan badge: a white star inside a gold ring, on an azure field." />
+          <figcaption>Pixel's Bakery &middot; level 3</figcaption>
+        </figure>
+        <p class="showcase-note">Two real badges from the server, built in the editor and worn as Discord role icons.</p>
+      </div>
+      <ul class="showcase-list">
+        <li>
+          <strong>Clans</strong>
+          <p>Ten ranks, Iron to Challenger, climbed by playing together. Each rank unlocks more of the badge editor, and what you build becomes your clan's role icon.</p>
+        </li>
+        <li>
+          <strong>The dungeon</strong>
+          <p>A roguelike run with classes, skills and a relic pick at every elite. It does not care that you are in champ select.</p>
+        </li>
+        <li>
+          <strong>Cards</strong>
+          <p>Packs, decks, and battles you can put Int Coins on.</p>
+        </li>
+        <li>
+          <strong>And the small stuff</strong>
+          <p>A daily Wordle, daily quests, music in voice, and coins dropping during streams.</p>
+        </li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <section id="faq" class="wrap" aria-label="Frequently asked questions">
   <h2>Common questions</h2>
+  <!-- Two static columns rather than CSS multicol: an answer opening in a
+       multicol container reflows items between columns while someone is reading
+       them. Two independent lists means opening one never moves the other, and
+       the split keeps priority order down each column on a phone. -->
   <div class="faq">
+   <div class="faq-col">
     <details>
       <summary>Do I need a full team to sign up?</summary>
       <p class="answer"><span>No. Register solo or with one duo partner, and Starling drafts you onto a balanced team of five. Showing up without a squad is normal, not a workaround. Clan tournaments for full premade teams are coming.</span></p>
@@ -1329,6 +1445,8 @@
       <summary>What rank do I need to be?</summary>
       <p class="answer"><span>Any. Teams are matched by estimated MMR, not rank, so Iron and Challenger both get competitive games.</span></p>
     </details>
+   </div>
+   <div class="faq-col">
     <details>
       <summary>How are teams balanced?</summary>
       <p class="answer"><span>Starling estimates your MMR from ranked history and drafts teams to come in close in strength, seating you in your preferred role when possible.</span></p>
@@ -1345,6 +1463,7 @@
       <summary>I got banned. Can I appeal?</summary>
       <p class="answer"><span>Yes. Email <a href="mailto:appeals@starling.gg">appeals@starling.gg</a> with your Discord username and we'll take a look.</span></p>
     </details>
+   </div>
   </div>
 </section>
 
@@ -1352,7 +1471,7 @@
   <div class="wrap">
     <p class="kicker" id="join-kicker">Every three weeks on Saturdays, 3:30 PM Central</p>
     <h2>Ready when you are</h2>
-    <p>Join the server, link your Riot ID, and you're in the next bracket. Show up solo and you'll leave with four new teammates.</p>
+    <p class="join-lede">Join the server, link your Riot ID, and you're in the next bracket. Show up solo and you'll leave with four new teammates.</p>
     <a class="cta" href="https://discord.gg/CAzyGpVun7" target="_blank" rel="noopener noreferrer">Join the Discord</a>
   </div>
 </section>
@@ -1686,10 +1805,20 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) { return; }
-        run.setAttribute("data-reveal", "in");
-        io.disconnect();
+        reveal();
       });
     }, { threshold: 0.2 });
+    function reveal() {
+      run.setAttribute("data-reveal", "in");
+      io.disconnect();
+      clearTimeout(failsafe);
+    }
+    // Setting "pending" is what makes these cards opacity:0, so from here on the
+    // observer is the only thing standing between a visitor and the best content
+    // on the page. Every real scroll path fires it, but the failure mode is
+    // invisible content rather than missing motion, so it does not get to be the
+    // only path: after three seconds the cards arrive whether it fired or not.
+    var failsafe = setTimeout(reveal, 3000);
     io.observe(run);
   })();
 
