@@ -655,10 +655,6 @@
     .match[data-outcome="loss"]::before { background: var(--line); }
     .match[data-outcome="title"]::before { background: var(--gold-bright); }
     .match-round {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 0.6rem;
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
       font-size: var(--t-micro);
@@ -670,15 +666,6 @@
       white-space: nowrap;
     }
     .match[data-outcome="title"] .match-round { color: var(--gold-bright); }
-    /* The stripe already encodes this match's outcome, but only for someone who
-       has learned the stripe. The tint on the winning row belongs to whoever won
-       that match, which in the first card is the opponent -- so a person skimming
-       five cards watches the bright name flip sides and cannot tell whose run
-       they are reading. This names the outcome from the subject team's side, in
-       the same accents the stripe uses. */
-    .match-flag { color: var(--accent-hover); }
-    .match[data-outcome="loss"] .match-flag { color: var(--muted); }
-    .match[data-outcome="title"] .match-flag { color: var(--gold-bright); }
     .team {
       display: flex;
       align-items: center;
@@ -888,25 +875,35 @@
        server with zero completed tournaments should show nothing here rather
        than a row of zeroes. */
     #community { display: none; }
+    /* One panel divided, not two free-floating tiles. An auto-fit grid of
+       separate cards is the right form for a set whose size can change; this set
+       is exactly two, and two detached tiles in a row read as a three-up grid
+       with a box missing. Closing them into a single object with a hairline
+       between removes the empty slot entirely -- the panel is complete at the
+       width it occupies, and the divider is the same device the steps list and
+       the champions list already use for rows inside one object. */
     .stat-row {
       list-style: none;
       display: grid;
-      /* auto-fit per the system's own stat-tile grid rule (collapses to one
-         column on a narrow phone). The row's own max-width is capped
-         separately so the tiles read as tiles on the wider .wrap measure
-         instead of stretching into sparse giants -- tightened when the coins
-         stat was dropped and two tiles were left splitting a three-tile cap. */
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
       max-width: 30rem;
       margin-top: 2rem;
-    }
-    .stat-row li {
       background: var(--rig-panel);
       border: 1px solid var(--line);
       border-radius: 6px;
-      padding: 1.1rem 0.75rem;
+      overflow: hidden;
+    }
+    .stat-row li {
+      padding: 1.25rem 0.75rem;
       text-align: center;
+    }
+    .stat-row li + li { border-left: 1px solid var(--divider); }
+    /* Below this the two labels ("Tournaments run", "Players competed") wrap
+       inside their own cell, so the panel stacks instead and the divider turns
+       with it. */
+    @media (max-width: 420px) {
+      .stat-row { grid-template-columns: 1fr; }
+      .stat-row li + li { border-left: 0; border-top: 1px solid var(--divider); }
     }
     .stat-value {
       display: block;
@@ -1194,34 +1191,41 @@
 <section id="bracket" aria-label="A finished bracket">
   <div class="wrap">
     <h2>Everyone gets a second life</h2>
-    <p>Every tournament is double elimination. Losing a match drops you into the losers bracket, where you can fight all the way back to the Grand Finals. Starling draws the bracket and posts an updated image after every game.</p>
+    <p>Every tournament is double elimination. Losing a match drops you into the losers bracket, where you can fight all the way back to the Grand Finals.</p>
+    <!-- The cards below are one team's run, and until this sentence existed the
+         page never said so. Without an owner, the tint on the winning row (which
+         belongs to whoever won that match, so it changes sides) reads as five
+         unrelated results. Naming the team and the arc up front is what makes the
+         cards legible; a WIN/LOSS tag on each card was tried instead and was
+         worse, because a bare outcome with no subject is a second puzzle. -->
+    <p>Here is one team's night at Run It Back. Krugalicious lost their opening match and won every match after it.</p>
 
     <!-- Krugalicious' run at Run It Back, every match read off bracket.png below.
          No scores: that bracket does not carry any, and inventing them is not on
          the table. -->
     <ol class="run" id="run" aria-label="Krugalicious' run at Run It Back, match by match">
       <li class="match" data-outcome="loss" style="--i:0">
-        <p class="match-round">Winners R1 <span class="match-flag">Loss</span></p>
+        <p class="match-round">Winners R1</p>
         <div class="team">Krugalicious</div>
         <div class="team is-winner">NCTEB<span class="vh"> won</span></div>
       </li>
       <li class="match" data-outcome="win" style="--i:1">
-        <p class="match-round">Losers R1 <span class="match-flag">Win</span></p>
+        <p class="match-round">Losers R1</p>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
         <div class="team">Baddies</div>
       </li>
       <li class="match" data-outcome="win" style="--i:2">
-        <p class="match-round">Losers R2 <span class="match-flag">Win</span></p>
+        <p class="match-round">Losers R2</p>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
         <div class="team">The Lil Guys</div>
       </li>
       <li class="match" data-outcome="win" style="--i:3">
-        <p class="match-round">Grand Finals <span class="match-flag">Win</span></p>
+        <p class="match-round">Grand Finals</p>
         <div class="team">NCTEB</div>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
       </li>
       <li class="match" data-outcome="title" style="--i:4">
-        <p class="match-round">Bracket Reset <span class="match-flag">Title</span></p>
+        <p class="match-round">Bracket Reset</p>
         <div class="team">NCTEB</div>
         <div class="team is-winner">Krugalicious<span class="vh"> won</span></div>
       </li>
@@ -1240,7 +1244,7 @@
     </figure>
   </div>
   <div class="wrap">
-    <p class="run-caption">This is what a second life looks like: an early loss to NCTEB, then four straight wins back through the losers bracket to steal the title.</p>
+    <p class="run-caption">Starling redraws this bracket after every reported match, so the one sitting in the server is always the current one.</p>
   </div>
 </section>
 
