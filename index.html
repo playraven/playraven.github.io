@@ -370,6 +370,28 @@
     }
     .masthead a.discord:hover { background: transparent; color: var(--accent-hover); border-color: var(--accent-hover); }
 
+    /* Ghost style (DESIGN.md's button-ghost): this isn't the page's primary
+       commit action, it's a rare utility link only organizers/announcers ever
+       see, so it doesn't compete with the Discord join button's accent fill. */
+    .masthead a.vod-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--rig-panel);
+      border: 1px solid var(--rig-line);
+      padding: 0 1rem;
+      border-radius: 6px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .masthead a.vod-link:hover { background: var(--rig-line); }
+
     /* The member count is sourced from the bot's own guild cache (see
        music_bot.py's community-stats handler), not fetched from Discord
        client-side -- Discord's public widget/invite JSON endpoints either
@@ -903,6 +925,7 @@
          width, same as before this badge existed -- a third flex item here
          wraps the button's own label onto two lines, which reads as broken. */
       .live-badge { display: none; }
+      .vod-link { display: none; }
       section.band { padding: 0.75rem 0 2.75rem; }
       section.band-raised.join { padding: 2.75rem 0 3.25rem; }
       section.hero { padding: 2.75rem 1.25rem 3rem; }
@@ -1164,6 +1187,9 @@
   <div class="wrap masthead">
     <a class="wordmark" href="/">STARLING<span class="wm-tld">.GG</span></a>
     <span class="live-badge" id="live-badge" hidden><span class="live-badge-dot" aria-hidden="true"></span><span id="live-count"></span></span>
+    <!-- Organizer/announcer only -- hidden until /vod/access confirms it (cogs/vod_web.py),
+         never shown then broken, since the visibility check IS the access check. -->
+    <a class="vod-link" id="vod-link" href="https://rexerserver.tail1b6fea.ts.net/vod" hidden>Upload Match Video</a>
     <!-- The label is one span, not three text nodes: this anchor is an inline-flex
          box, so bare words would each become their own flex item and the spaces
          between them would be dropped ("JOINTHEDISCORD"). -->
@@ -1501,6 +1527,7 @@
   // three different things, and only the database was ever right.
   var FEED = "https://rexerserver.tail1b6fea.ts.net/api/next-event.json";
   var COMMUNITY_FEED = "https://rexerserver.tail1b6fea.ts.net/api/community-stats.json";
+  var VOD_ACCESS_URL = "https://rexerserver.tail1b6fea.ts.net/vod/access";
   var REFRESH_MS = 5 * 60 * 1000;
 
   var el = {
@@ -1793,6 +1820,18 @@
       .catch(function () { /* stays hidden -- never show a stale or invented count */ });
   }
 
+  // Cross-origin, credentialed: this is the one fetch on the page that sends the
+  // site_auth session cookie (SameSite=None specifically for this reason -- see
+  // cogs/site_auth.py). Whether the link renders IS the access check: a signed-out
+  // visitor or one without the organizer/announcer role gets a plain {access:false}
+  // and the link just never appears, same fail-safe-hidden shape as the live badge.
+  function loadVodAccess() {
+    fetch(VOD_ACCESS_URL, { cache: "no-store", credentials: "include" })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (data) { show(document.getElementById("vod-link"), !!data.access); })
+      .catch(function () { /* stays hidden */ });
+  }
+
   // The run arrives left to right when it scrolls into view, which is the shape
   // of the comeback it describes. The cards are visible by default, so a browser
   // with no IntersectionObserver, or a visitor who asked for reduced motion,
@@ -1876,11 +1915,12 @@
 
   load();
   loadCommunity();
+  loadVodAccess();
   setInterval(load, REFRESH_MS);
   setInterval(loadCommunity, REFRESH_MS);
   // A tab left open overnight should not still be showing yesterday's state.
   document.addEventListener("visibilitychange", function () {
-    if (!document.hidden) { load(); loadCommunity(); }
+    if (!document.hidden) { load(); loadCommunity(); loadVodAccess(); }
   });
 })();
 </script>
