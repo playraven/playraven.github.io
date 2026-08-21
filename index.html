@@ -1190,6 +1190,7 @@
     <!-- Organizer/announcer only -- hidden until /vod/access confirms it (cogs/vod_web.py),
          never shown then broken, since the visibility check IS the access check. -->
     <a class="vod-link" id="vod-link" href="https://rexerserver.tail1b6fea.ts.net/vod" hidden>Upload Match Video</a>
+    <a class="vod-link" id="signin-link" href="https://rexerserver.tail1b6fea.ts.net/auth/login?next=/vod" hidden>Sign in</a>
     <!-- The label is one span, not three text nodes: this anchor is an inline-flex
          box, so bare words would each become their own flex item and the spaces
          between them would be dropped ("JOINTHEDISCORD"). -->
@@ -1823,13 +1824,19 @@
   // Cross-origin, credentialed: this is the one fetch on the page that sends the
   // site_auth session cookie (SameSite=None specifically for this reason -- see
   // cogs/site_auth.py). Whether the link renders IS the access check: a signed-out
-  // visitor or one without the organizer/announcer role gets a plain {access:false}
-  // and the link just never appears, same fail-safe-hidden shape as the live badge.
+  // visitor or one without the organizer/announcer role gets a plain {access:false},
+  // and gets the Sign in link instead (mutually exclusive with Upload Match Video,
+  // never both) -- there's no way to tell "not signed in" from "signed in, no role"
+  // from this one boolean, but Sign in is a harmless thing to show either way: it
+  // just runs the Discord OAuth flow again, which is a no-op if already signed in.
   function loadVodAccess() {
     fetch(VOD_ACCESS_URL, { cache: "no-store", credentials: "include" })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
-      .then(function (data) { show(document.getElementById("vod-link"), !!data.access); })
-      .catch(function () { /* stays hidden */ });
+      .then(function (data) {
+        show(document.getElementById("vod-link"), !!data.access);
+        show(document.getElementById("signin-link"), !data.access);
+      })
+      .catch(function () { /* both stay hidden */ });
   }
 
   // The run arrives left to right when it scrolls into view, which is the shape
