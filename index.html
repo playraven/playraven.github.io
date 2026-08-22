@@ -1190,7 +1190,6 @@
     <!-- Organizer/announcer only -- hidden until /vod/access confirms it (cogs/vod_web.py),
          never shown then broken, since the visibility check IS the access check. -->
     <a class="vod-link" id="vod-link" href="https://rexerserver.tail1b6fea.ts.net/vod" hidden>Upload Match Video</a>
-    <a class="vod-link" id="signin-link" href="https://rexerserver.tail1b6fea.ts.net/auth/login?next=/vod" hidden>Sign in</a>
     <!-- The label is one span, not three text nodes: this anchor is an inline-flex
          box, so bare words would each become their own flex item and the spaces
          between them would be dropped ("JOINTHEDISCORD"). -->
@@ -1514,6 +1513,10 @@
       <a href="mailto:contact@starling.gg">Contact</a>
       <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/TOS.md" target="_blank" rel="noopener noreferrer">Terms</a>
       <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy</a>
+      <!-- Organizer/announcer only -- hidden until /vod/access confirms it (cogs/vod_web.py),
+           never shown then broken, since the visibility check IS the access check. Named
+           for who it's for so nobody else is tempted to click it. -->
+      <a id="signin-link" href="https://rexerserver.tail1b6fea.ts.net/auth/login?next=/vod" hidden>Announcer sign in</a>
     </div>
   </div>
 </footer>
