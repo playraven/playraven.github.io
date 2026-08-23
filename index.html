@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Free 5v5 League of Legends tournaments on Discord. Show up alone and get drafted onto an MMR-balanced team. Verified accounts, double elimination, every three weeks on Saturdays." />
+  <meta name="description" content="Free 5v5 League of Legends tournaments on Discord. Show up alone and get drafted onto an MMR-balanced team, verified accounts, double elimination." />
   <meta name="theme-color" content="#211a1f" />
   <link rel="canonical" href="https://starling.gg/" />
 
@@ -32,18 +32,55 @@
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23211a1f'/><text x='50' y='72' font-family='Bebas Neue, sans-serif' font-size='64' fill='%23dee0e4' text-anchor='middle'>S</text></svg>" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Preloaded ahead of the stylesheet link below so the browser starts fetching
-       the font CSS (and, via the preconnect above, the font files it points to)
-       as early as possible in the head. display=fallback, not swap or optional:
-       fallback text still shows almost instantly, but the real font gets a ~3s
-       window to swap in early -- before anyone's actually reading -- rather than
-       optional's near-zero window (which gave up on the font outright on this
-       connection) or swap's unbounded one (which flashed mid-read). Past that
-       window it stops trying, so it can't flash in late either. -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Public+Sans:wght@400;600&family=Rajdhani:wght@600;700&display=fallback">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Public+Sans:wght@400;600&family=Rajdhani:wght@600;700&display=fallback" rel="stylesheet">
+  <!-- Self-hosted (2026-08-23): these are the exact static woff2 instances Google
+       Fonts itself serves for these families/weights/subsets, just fetched from this
+       origin instead of fonts.googleapis.com. Same glyphs, same files -- this only
+       removes the extra DNS/TLS/request round trip to Google's CSS endpoint, which
+       Lighthouse flagged as the single biggest render-blocking cost on throttled
+       mobile (the stylesheet fetch alone, ~750ms, was most of a ~1.75s LCP hit).
+       Preloaded as font/woff2 so the browser fetches bytes immediately instead of
+       waiting to discover them via the @font-face rule below; crossorigin is
+       required on font preloads even same-origin; display=fallback rationale is
+       unchanged from the old Google Fonts query (see the @font-face rules). -->
+  <link rel="preload" as="font" type="font/woff2" href="fonts/BebasNeue-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/PublicSans-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/Rajdhani-Bold.woff2" crossorigin>
+  <style>
+    /* display: fallback, not swap or optional: fallback text still shows almost
+       instantly, but the real font gets a ~3s window to swap in early -- before
+       anyone's actually reading -- rather than optional's near-zero window (which
+       gave up on the font outright on a slow connection) or swap's unbounded one
+       (which flashed mid-read). Past that window it stops trying, so it can't
+       flash in late either. */
+    @font-face {
+      font-family: "Bebas Neue";
+      font-style: normal;
+      font-weight: 400;
+      font-display: fallback;
+      src: url("fonts/BebasNeue-Regular.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Public Sans";
+      font-style: normal;
+      font-weight: 400;
+      font-display: fallback;
+      src: url("fonts/PublicSans-Regular.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Public Sans";
+      font-style: normal;
+      font-weight: 600;
+      font-display: fallback;
+      src: url("fonts/PublicSans-SemiBold.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Rajdhani";
+      font-style: normal;
+      font-weight: 700;
+      font-display: fallback;
+      src: url("fonts/Rajdhani-Bold.woff2") format("woff2");
+    }
+  </style>
 
   <title>Starling | Free 5v5 League tournaments on Discord</title>
 
