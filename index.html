@@ -1550,10 +1550,11 @@
       <a href="mailto:contact@starling.gg">Contact</a>
       <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/TOS.md" target="_blank" rel="noopener noreferrer">Terms</a>
       <a href="https://github.com/Rexergamn/raven-bot-legal/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy</a>
-      <!-- Organizer/announcer only -- hidden until /vod/access confirms it (cogs/vod_web.py),
-           never shown then broken, since the visibility check IS the access check. Named
-           for who it's for so nobody else is tempted to click it. -->
-      <a id="signin-link" href="https://rexerserver.tail1b6fea.ts.net/auth/login?next=/vod" hidden>Announcer sign in</a>
+      <!-- General staff entry point (cogs/staff_web.py), always visible like the other
+           footer links. /staff itself is safe to expose publicly: a signed-out visitor
+           gets a sign-in button there, and each tool tile only renders if that visitor's
+           session actually has the access it requires. -->
+      <a id="staff-signin-link" href="https://rexerserver.tail1b6fea.ts.net/staff">Staff sign in</a>
     </div>
   </div>
 </footer>
@@ -1863,20 +1864,16 @@
 
   // Cross-origin, credentialed: this is the one fetch on the page that sends the
   // site_auth session cookie (SameSite=None specifically for this reason -- see
-  // cogs/site_auth.py). Whether the link renders IS the access check: a signed-out
-  // visitor or one without the organizer/announcer role gets a plain {access:false},
-  // and gets the Sign in link instead (mutually exclusive with Upload Match Video,
-  // never both) -- there's no way to tell "not signed in" from "signed in, no role"
-  // from this one boolean, but Sign in is a harmless thing to show either way: it
-  // just runs the Discord OAuth flow again, which is a no-op if already signed in.
+  // cogs/site_auth.py). Whether the masthead link renders IS the access check for
+  // it. The footer's Staff sign in link is unconditional -- it's the general
+  // entry point to /staff, not VOD-specific, so it doesn't depend on this result.
   function loadVodAccess() {
     fetch(VOD_ACCESS_URL, { cache: "no-store", credentials: "include" })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function (data) {
         show(document.getElementById("vod-link"), !!data.access);
-        show(document.getElementById("signin-link"), !data.access);
       })
-      .catch(function () { /* both stay hidden */ });
+      .catch(function () { /* stays hidden */ });
   }
 
   // The run arrives left to right when it scrolls into view, which is the shape
