@@ -606,6 +606,28 @@
       font-size: var(--t-meta);
       color: var(--text-primary);
     }
+    /* Ghost style (DESIGN.md's button-ghost), same reasoning as .masthead
+       a.vod-link: "Join the Discord" stays the page's one primary commit, so
+       this doesn't compete with a filled accent. The border alone carries the
+       "there's a stream right now" state, per the Stripe-Not-Fill rule. */
+    .ticket .watch-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 0.85rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: var(--t-micro);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--rig-panel);
+      border: 1px solid var(--accent-live);
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .ticket .watch-link:hover { background: var(--accent-live); color: var(--rig-black); }
     .ticket .then {
       margin-top: 0.9rem;
       padding-top: 0.8rem;
@@ -1274,6 +1296,10 @@
         <div class="countdown-unit" id="cd-secs-unit"><span class="countdown-value" id="cd-secs">&ndash;&ndash;</span><span class="countdown-label">Sec</span></div>
       </div>
       <p class="note" id="event-note">Join the Discord and the next date lands in your announcements channel.</p>
+      <!-- Only shown once a stage is actually confirmed streaming (event.watch_live),
+           never just because the tournament is "in_progress" -- a bracket can run for
+           hours between matches with nothing to embed. -->
+      <a class="watch-link" id="event-watch-link" href="#" hidden>Watch live &rarr;</a>
       <!-- No prize line here. It was the one thing in this panel that was not
            read off the feed -- a standing claim that the winner takes a specific
            in-game reward, in a panel built specifically so nothing could go stale
@@ -1570,6 +1596,7 @@
   var FEED = "https://rexerserver.tail1b6fea.ts.net/api/next-event.json";
   var COMMUNITY_FEED = "https://rexerserver.tail1b6fea.ts.net/api/community-stats.json";
   var VOD_ACCESS_URL = "https://rexerserver.tail1b6fea.ts.net/vod/access";
+  var WATCH_URL = "https://rexerserver.tail1b6fea.ts.net/watch";
   var REFRESH_MS = 5 * 60 * 1000;
 
   var el = {
@@ -1585,6 +1612,7 @@
     secs: document.getElementById("cd-secs"),
     secsUnit: document.getElementById("cd-secs-unit"),
     note: document.getElementById("event-note"),
+    watchLink: document.getElementById("event-watch-link"),
     then: document.getElementById("event-then"),
     joinKicker: document.getElementById("join-kicker")
   };
@@ -1721,6 +1749,7 @@
     show(el.countdown, false);
     setText(el.note, "Join the Discord and the next date lands in your announcements channel.");
     show(el.note, true);
+    show(el.watchLink, false);
     show(el.then, false);
   }
 
@@ -1741,8 +1770,13 @@
       setText(el.eyebrow, "Happening now");
       setChip("Playing live", true);
       show(el.countdown, false);
-      setText(el.note, "Matches are running right now. Join the server to watch in the Stage channel and catch a drop.");
+      setText(el.note, event.watch_live
+        ? "A match is live right now. Watch on the site, or join the server to catch a drop."
+        : "Matches are running right now. Join the server to watch in the Stage channel and catch a drop.");
+      if (event.watch_live) { el.watchLink.href = WATCH_URL; }
+      show(el.watchLink, !!event.watch_live);
     } else {
+      show(el.watchLink, false);
       setText(el.eyebrow, "Next tournament");
       if (event.registration_open) {
         setState("open");
