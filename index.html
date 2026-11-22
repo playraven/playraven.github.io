@@ -1247,7 +1247,7 @@
     <span class="live-badge" id="live-badge" hidden><span class="live-badge-dot" aria-hidden="true"></span><span id="live-count"></span></span>
     <!-- Organizer/announcer only -- hidden until /vod/access confirms it (cogs/vod_web.py),
          never shown then broken, since the visibility check IS the access check. -->
-    <a class="vod-link" id="vod-link" href="https://rexerserver.tail1b6fea.ts.net/vod" hidden>Upload Match Video</a>
+    <a class="vod-link" id="vod-link" href="https://app.starling.gg/vod" hidden>Upload Match Video</a>
     <!-- The label is one span, not three text nodes: this anchor is an inline-flex
          box, so bare words would each become their own flex item and the spaces
          between them would be dropped ("JOINTHEDISCORD"). -->
@@ -1578,7 +1578,7 @@
            footer links. /staff itself is safe to expose publicly: a signed-out visitor
            gets a sign-in button there, and each tool tile only renders if that visitor's
            session actually has the access it requires. -->
-      <a id="staff-signin-link" href="https://rexerserver.tail1b6fea.ts.net/staff">Staff sign in</a>
+      <a id="staff-signin-link" href="https://app.starling.gg/staff">Staff sign in</a>
     </div>
   </div>
 </footer>
@@ -1593,7 +1593,7 @@
   // three different things, and only the database was ever right.
   var FEED = "https://app.starling.gg/api/next-event.json";
   var COMMUNITY_FEED = "https://app.starling.gg/api/community-stats.json";
-  var VOD_ACCESS_URL = "https://rexerserver.tail1b6fea.ts.net/vod/access";
+  var VOD_ACCESS_URL = "https://app.starling.gg/vod/access";
   var WATCH_URL = "https://app.starling.gg/watch";
   var REFRESH_MS = 5 * 60 * 1000;
 
